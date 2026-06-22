@@ -25,17 +25,43 @@ Target-Capture-SNP-Pipeline/
 
 ## Getting Started
 
-Clone the repository:
+The rendered tutorial can be viewed online without downloading the repository or opening RStudio:
+
+[View the Target Capture SNP Pipeline website](https://samdrewry.github.io/Target-Capture-SNP-Pipeline/)
+
+Users who want to inspect the source files, modify the workflow, or run the R Markdown document locally can clone the repository:
 
 ```bash
 git clone https://github.com/samdrewry/Target-Capture-SNP-Pipeline.git
 ```
 
-Open the project folder in RStudio and render the main R Markdown file:
+After cloning, open the project folder in RStudio by selecting:
+
+```text
+File > New Project > Existing Directory
+```
+
+and choosing the `Target-Capture-SNP-Pipeline/` folder.
+
+The main tutorial file is:
+
+```text
+index.Rmd
+```
+
+To render the tutorial locally, run:
 
 ```r
 rmarkdown::render("index.Rmd")
 ```
+
+This will generate the rendered HTML file:
+
+```text
+index.html
+```
+
+which is the file used for the GitHub Pages website.
 
 ## Required Software
 
