@@ -1,5 +1,5 @@
 ---
-title: "Leveraging Target-Capture SNP Data for Conservation Genomics: A Workflow Illustrated by the Endangered Whorled Sunflower (*Helianthus verticillatus*) "
+title: "Leveraging Target-Capture SNP Data for Conservation Genomics: A Workflow Illustrated by the Endangered Whorled Sunflower and Relatives"
 author: "Samantha G. Drewry^1^\\*, Erika R. Moore-Pollard^1,2^, Jennifer R. Mandel^1,3^\\*"
 output: 
   html_document:
@@ -36,39 +36,32 @@ Helianthus_sp_Locations <- read.csv("Helianthus sp. Locations.csv")
 ```
 
 # Introduction
-Advances in second-generation sequencing technologies have transformed population genomic research by enabling researchers to generate genome-scale datasets for non-model organisms with increasing efficiency and affordability. These datasets provide unprecedented opportunities to investigate genetic diversity, population structure, demographic history, and evolutionary relationships across a wide range of biological systems, including both well-studied and understudied systems. As genomic datasets become increasingly accessible, population genomic approaches are playing an expanding role in evolutionary biology, ecology, and conservation management [@supple2018]. 
+Advances in second-generation sequencing technologies have transformed population genomic research by enabling researchers to generate genome-scale datasets for non-model organisms with increasing efficiency and affordability. These datasets provide unprecedented opportunities to investigate genetic diversity, population structure, demographic history, and evolutionary relationships across a wide range of biological systems, including both well-studied and understudied systems. As genomic datasets become increasingly accessible, population genomic approaches are playing an ever expanding role in evolutionary biology, ecology, and conservation management [@supple2018]. 
 
-One particularly important application of population genomics is conservation biology, where assessing the amount and distribution of genetic variation within and among populations can inform management strategies for rare and endangered species. Conservation actions often aim to preserve as much existing genetic diversity as possible through in situ protection or ex situ conservation efforts, such as seed banking and cultivation in botanic gardens [@rajasekharan2015]. Historically, conservation genetic studies have relied on a limited number of molecular markers, most commonly microsatellites, also known as Simple Sequence Repeats (SSRs) or short tandem repeats (STRs; [@merritt2015; @vieira2016]), to estimate population genetic parameters and identify conservation units [@muneer2014; @supple2018]. Although these approaches have proven valuable in many studies (e.g., [@ellis2007; @thapa2019; @krak2020; @vlasta2020]), analyses based on relatively few loci may have limited power to detect fine-scale population structure or complex evolutionary histories. Genome-wide datasets consisting of thousands of single nucleotide polymorphisms (SNPs) can provide more precise estimates of genetic diversity [@luikart2003; @allendorf2010; @frankham2010; @hoffmann2015; @shafer2015; @benestan2016; @supple2018], improve resolution in clustering analyses [@morin2012; @langin2018; @lemopoulos2019; @zimmerman2020], and in some cases lead to conservation recommendations that differ from those based on smaller marker sets [@mccartney2018genomic; @mccartney2018population; @supple2018]. 
+One particularly important application of population genomics is in conservation genetics, where assessing the amount and distribution of genetic variation within and among populations can inform management strategies for rare and endangered species. Conservation actions often aim to preserve as much existing genetic diversity as possible through in situ protection or ex situ conservation efforts, such as seed banking and cultivation in botanic gardens [@rajasekharan2015]. Historically, conservation genetic studies have relied on a limited number of molecular markers, most commonly microsatellites, also known as Simple Sequence Repeats (SSRs) or short tandem repeats (STRs; [@merritt2015; @vieira2016]), to estimate population genetic parameters and identify conservation units [@muneer2014; @supple2018]. Although these approaches have proven valuable in many studies (e.g., [@ellis2007; @thapa2019; @krak2020; @vlasta2020]), analyses based on relatively few loci may have limited power to detect fine-scale population structure or complex evolutionary histories. Genome-wide datasets consisting of thousands of single nucleotide polymorphisms (SNPs) can provide more precise estimates of genetic diversity  [@luikart2003; @allendorf2010; @frankham2010; @hoffmann2015; @shafer2015; @benestan2016; @supple2018], improve resolution in clustering analyses [@morin2012; @langin2018; @lemopoulos2019; @zimmerman2020], and in some cases lead to conservation recommendations that differ from those based on smaller marker sets [@mccartney2018genomic; @mccartney2018population; @supple2018]. 
 
-Advances in next-generation sequencing technologies have made genome-scale datasets increasingly accessible for non-model organisms, expanding the potential for genomic approaches in conservation biology. Among these approaches, target-capture sequencing (also known as target-enrichment, hybrid-enrichment, or HybSeq) has become widely used in phylogenomic studies because it allows researchers to sequence hundreds to thousands of loci across many samples in a cost-effective and scalable manner [@mertes2011]. While target-capture data are typically generated to reconstruct phylogenetic relationships, these datasets also contain abundant SNP variation that can be leveraged for population genomic analyses [@nauheimer2021; @frost2024; @walden2026]. Despite this potential, target-capture sequencing is less commonly  applied in conservation population genomics as compared with reduced-representation approaches such as Restriction site-Associated DNA sequencing (RADseq). RADseq has been widely adopted because it enables the discovery and genotyping of thousands of genome-wide SNPs without requiring extensive genomic resources. However, RADseq datasets can suffer from locus dropout caused by mutations at restriction enzyme cut sites, resulting in substantial missing data and reduced comparability among individuals or divergent populations [@nunziata2018; @huhn2022; @atsawawaranunt2026]. In addition, the loci recovered in RADseq datasets often heavily depend on library preparation parameters and bioinformatic filtering, limiting reproducibility and the ability to integrate datasets across studies [@o2018]. Target-capture sequencing offers a promising alternative because it captures predefined loci that can be consistently recovered across individuals while simultaneously generating large numbers of SNPs [@harvey2016], increasing the possibility that datasets originally generated for phylogenomic studies could also be leveraged for conservation genomics.
+Advances in second-generation sequencing technologies have made genome-scale datasets increasingly accessible for non-model organisms, expanding the potential for genomic approaches in conservation biology. Among these approaches, target-capture sequencing (also known as target-enrichment, hybrid-enrichment, or HybSeq; @weitemier2014) has become widely used in phylogenomic studies because it allows researchers to sequence hundreds to thousands of genes across many samples in a cost-effective and scalable manner [@mertes2011]. While target-capture data are typically generated to reconstruct phylogenetic relationships, these datasets also contain abundant SNP variation that can be leveraged for population genomic analyses [@nauheimer2021; @frost2024; @walden2026]. Despite this potential, target-capture sequencing is less commonly applied in conservation population genomics as compared with reduced-representation approaches such as Restriction site-Associated DNA sequencing (RADseq). RADseq has been widely adopted because it enables the discovery and genotyping of thousands of genome-wide SNPs without requiring extensive genomic resources. However, RADseq datasets can suffer from locus dropout caused by mutations at restriction enzyme cut sites, resulting in substantial missing data and reduced comparability among individuals or divergent populations [@nunziata2018; @huhn2022; @atsawawaranunt2026]. In addition, the loci recovered in RADseq datasets often heavily depend on library preparation parameters and bioinformatic filtering, limiting reproducibility and the ability to integrate datasets across studies [@o2018]. Target-capture sequencing offers a promising alternative because it captures predefined genes that can be consistently recovered across individuals while simultaneously generating large numbers of SNPs [@harvey2016], increasing the possibility that datasets originally generated for phylogenomic studies could also be leveraged for conservation genomics.
 
 Another barrier to broader adoption is the lack of accessible and reproducible bioinformatic workflows for extracting and analyzing SNP datasets from target-capture data, particularly for researchers or conservation practitioners without extensive computational experience. Developing workflows that enable researchers to efficiently generate SNP datasets from target-capture sequencing could help bridge this gap and expand the use of genomic data in conservation studies. Because target-capture probe sets are often designed to work across broad taxonomic groups, such as plant families (e.g., Asteraceae, [@mandel2014; @moore2024] ; Orchidaceae, [@eserman2021]; Rubiaceae, [@ball2023]; Asparagaceae, [@bentz2024], these datasets can be readily applied to a wide range of species, including rare or endangered taxa for which genomic resources are limited. Moreover, target-capture approaches can produce datasets that are comparable across studies and scalable to large sample sizes, making them particularly useful for evaluating genetic diversity and population structure in conservation contexts. Providing clear and reproducible pipelines for processing these data therefore has the potential to make genomic analyses more accessible to a broader community of researchers and conservation managers.
 
-# Study System: *Helianthus verticillatus*
-*Helianthus verticillatus* Small (Asteraceae), also known as the whorled sunflower, provides an ideal system for demonstrating the application of such approaches. This perennial diploid species is federally listed as endangered and is endemic to the southeastern United States [@matthews2002]. It is a perennial, self-incompatible diploid with a haploid chromosome count of n=17. The diagnostic characters of the whorled sunflower are its whorled lower leaves (three or more leaves per node, in a whorled arrangement), yellow disk floret corollas, prominent midveins, and short petioles. 
 
-## History
+# Study System: *Helianthus verticillatus* and Relatives
 
-*Helianthus verticillatus* was first discovered in 1892 in Pinson, Tennessee by S.M.Bain and was described as a new species in 1898 by J.K. Small [@small1898]. Interestingly, this species was not found again in nature for over one hundred years. Several botanists in the 20th century proposed that *H. verticillatus* was a result of recent hybridization and not a true species, as there had only ever been one occurrence. Thus,the whorled sunflower was often not included in floras and keys [@chester1997atlas; @godfrey1981]. If it was included, it was listed as a doubtful species or a possible hybrid, with varying proposed parent species [@beatley1963; @cronquist1981; @heiser1969]. Charles Heiser’s hypothesis of *H. grosseserratus* and *H.angustifolius* as the parent species of *H. verticillatus* was the most plausible based onchromosome counts.
+*Helianthus verticillatus* Small (Asteraceae), also known as the whorled sunflower, provides an ideal system for demonstrating the application of such approaches. This perennial diploid species is federally listed as endangered and is endemic to the southeastern United States [@matthews2002]. Only four populations in Alabama, Georgia, and two counties in Tennessee (McNairy Co. and Madison Co.) were known for many years following its rediscovery in the 1990s, prompting initial conservation genetic studies using microsatellite markers to evaluate patterns of genetic diversity and population structure [@ellis2006; @mandel2010]. These studies provided important insights into the distribution of genetic variation among populations and informed conservation management decisions in various states, leading to its federally endangered status in 2014 [@usfws2014]. Following that work, additional populations were discovered in Mississippi and Virginia in 2017 and 2019, respectively. These discoveries prompted more population genetic work which found that the Mississippi (hereafter referred to as whorled-Marshall or ‘w-Marshall’) and Virginia sites harbor novel genetic variation in comparison to the previously known populations, and w-Marshall harbored the most private alleles of all populations tested [@moore2022]. These results led to annual land surveys in Mississippi with hopes to find more populations that may explain this variation.
 
-The whorled sunflower was rediscovered in 1994 when a population was found in northwestern Georgia. Shortly after, populations were discovered in 1996 and 1998 in northeastern Alabama and western Tennessee, respectively. Interestingly, the western Tennessee population was located only ten kilometers away from the original collection site of 1892. @matthews2002 concluded that *H. verticillatus* was not a recent hybrid, but instead a good species in the *Helianthus* genus. @ellis2006 characterized the genetic diversity in *H. verticillatus* using 22 EST-SSR microsatellite markers and compared this rare species to a common congener, *H. angustifolius*. They found that *H. verticillatus* harbored significantly higher levels of genetic diversity than *H. angustifolius* at nuclear loci, despite the rarity of *H. verticillatus*. They also tested Charles Heiser’s hypothesis of a recent hybrid origin and concluded that the whorled sunflower was not a result of recent hybridization between the proposed parent species *H.grosseserratus* and *H. angustifolius*.
+In 2022, additional populations were discovered in Mississippi, with larger populations found in the Yazoo-Mississippi Delta (hereafter ‘Delta’) region that is nestled between the Mississippi and Yazoo rivers (USA) [@cobb1994], as well as some smaller populations in the northern portion of the state (hereafter ‘Northern Mississippi’). However, these populations exhibited unexpected phenotypes compared to typical *H. verticillatus*, and had intermediate morphologies between *H. verticillatus* and *Helianthus grosseserratus* M.Martens [@heiser1969], a closely related species found in the central to eastern regions of North America [@stephens2015]. Given that both species have overlapping ranges, and that *H. verticillatus* was once hypothesized to have a hybrid origin with other *Helianthus* species, including *H. grossesserratus* [@beatley1963; @heiser1969; @cronquist2001; @matthews2002], there is a need to reassess patterns of genetic diversity and population structure across this species using genome-scale data.
 
-A second Tennessee population was discovered in 2006. In 2010, Mandelinvestigated population genetic size and extent of clonality in *H. verticillatus*. She found that the populations exhibited high levels of clonal diversity and far fewer genetic individuals than had been estimated. Thus, effective population sizes were much smaller than previously reported. Due to its limited distribution and concerning effective population sizes, the whorled sunflower was listed as federally endangered in August 2014 [@ellis2006; @usfws2014; @mandel2010]. Then, in 2017 and 2019, new populations were discovered in Mississippi and Virginia, respectively. @moore2022 reevaluated genetic diversity and structure within *H. verticillatus* after the discovery of these new populations using 13 EST-SSR microsatellite markers. They found that both the Mississippi (also known as MSCC) and Virginia populations contained novel genetic variation, and Mississippi harbored the most private alleles of all populations. Clonal analysis revealed that the Virginia population contained only two genetically unique individuals, demonstrating that this population could potentially be under the most conservation concern. These results led to annual land surveys in Mississippi with hopes to find more populations that may explain this variation.
+## Applicability to this Workflow 
 
-## Present and *Helianthus grosseserratus*
+In this study, we demonstrate an accessible and reproducible workflow for generating and analyzing SNP datasets derived from target-capture sequencing data in a conservation genomics framework. Using *H. verticillatus* as a case study, we evaluate genetic diversity and population structure across multiple previously known and newly discovered populations in Mississippi (hereafter referred to as *Helianthus* sp.), and compare our results with previous conservation genetic analyses based on microsatellites. By providing a transparent pipeline that can be applied to any species or target-capture probe set, this study illustrates how target-capture datasets can be leveraged to address conservation genomic questions and inform management decisions for rare and endangered species.
 
-In 2022, additional populations were discovered in Mississippi; large populations were found in the Delta region, as well as some smaller populations in the northern portion of the state. However, these populations exhibited unexpected phenotypes. Some stems from the Delta region populations expressed a whorled leaf morphology, while some had an opposite leaf morphology. Whorled lower leaves are widely considered to be the diagnostic characteristic of *H. verticillatus*, while opposite lower leaves are common in *H. grosseserratus* [@weakley2023]. The northern Mississippi populations exhibited alternate lower leaves, which can be found in *H. grosseserratus* individuals as well [@heiser1969; @weakley2023]. This intermediate morphology between *H. verticillatus* and *H. grosseserratus* introduced the idea that these populations could potentially be the result of past hybridization or introgression involving these two species.
 
-The saw-toothed sunflower, *Helianthus grosseserratus*, is a sister species to *H. verticillatus* (Moore-Pollard, unpublished). Like *H. verticillatus*, it is a perennial, diploid species with a haploid chromosome count of n=17. The saw-toothed sunflower is much more widespread than the whorled sunflower, with a range that is centered in the Midwest and spreads to include the central and eastern United States and Canada [@weakley2023]. *Helianthus grosseserratus* is known to display both the opposite and alternate leaf morphology found in the newly discovered Mississippi populations and has geographic overlap in Mississippi. This species also has similar genetic traits to *H. verticillatus* that would improve their ability to hybridize, such as chromosome count. These factors make *H. grosseserratus* a great candidate to test for hybridization, admixture, and introgression  with *H. verticillatus*, which could have played a role in the evolutionary history of the newly discovered Mississippi populations. 
-
-## Application to this Workflow
-
-*Helianthus verticillatus* provides an excellent test case for this workflow, as microsatellite data are available for this species. This allows direct comparisons between population structure, gene flow, and genetic diversity inferred from target-capture SNP data and results obtained from locus-level microsatellite analyses.
- 
 # Sampling
 
 ## Distribution Data
-A total of 23 populations of *Helianthus* were included in this study. Leaf tissue was sampled from all known wild populations of *Helianthus verticillatus*: Alabama, Georgia, McNairy (Tennessee), Pinson (Tennessee), MSCC (Mississippi), and Virginia. This study recognizes Alabama as having two subpopulations, Alabama1 and Alabama2, due to previously observed ecological and morphological differences (see [@ellis2006]). Seeds were obtained from the two available accessions of *H. verticillatus* maintained by the United States Department of Agriculture – Agricultural Research Service (USDA-ARS), likely originating from the Alabama2 and Pinson populations given their coordinates. These USDA accessions were collected roughly 18 years apart; however, in clonal perennial species, individuals can persist for long periods with limited sexual reproduction, reducing genetic turnover over this timescale [@dewitte2010; @stoeckel2021], and therefore are not expected to differ substantially due to sampling time alone. Leaf tissue was sampled from all known populations of *Helianthus sp.* in Mississippi: Belzonia, Benton, Greenwood, Grenada, Marshall, and Tchula. Additionally, seeds were obtained from eight USDA-ARS accessions of *H. grosseserratus* populations, spanning its geographic range: Illinois, Iowa, Kansas, Mississippi, Nebraska, North Dakota, Oklahoma, and Wisconsin. *Helianthus grosseserratus* was included because of its overlapping range and suspected hybridizations with *H. verticillatus* [@beatley1963; @heiser1969; @cronquist1981; @matthews2002]. Some downstream analyses require the inclusion of an outgroup, so a single individual of *Helianthus schweinitzii* Torr. & A.Gray was included.
+
+Leaf tissue was sampled from all known wild populations of *Helianthus verticillatus*: Alabama, Georgia, McNairy (Tennessee), Pinson (Tennessee), w-Marshall (Mississippi), and Virginia. This study recognizes Alabama as having two subpopulations, Alabama1 and Alabama2, due to previously observed ecological and morphological differences (see [@mandel2010]). Seeds were obtained from the two available accessions of *H. verticillatus* maintained by the United States Department of Agriculture–Agricultural Research Service (USDA-ARS). Leaf tissue was sampled from all known populations of *Helianthus* sp. in Mississippi: Belzonia, Benton, Greenwood, Grenada, Marshall, and Tchula. Additionally, seeds were obtained from eight USDA-ARS accessions of *H. grosseserratus* populations, spanning its geographic range: Illinois, Iowa, Kansas, Mississippi, Nebraska, North Dakota, Oklahoma, and Wisconsin. *Helianthus grosseserratus* was included because of its overlapping range and suspected hybridizations with *H. verticillatus* [@beatley1963; @heiser1969; @cronquist2001; @matthews2002]. Some downstream analyses require the inclusion of an outgroup, so a single individual of *Helianthus schweinitzii* Torr. & A.Gray was included.
+
 
 The sampling map features the *H. verticillatus* population locations at their county centroids, since the species is federally endangered.
 
@@ -134,11 +127,11 @@ Helianthusmap1
 
 # DNA Extraction and Sequencing
 
-Leaves were dried in silica beads after collection from live plants from the field or greenhouse. Dried leaf tissue (~20 mg) was ground using a Bead Mill 24 Homogenizer, and DNA was extracted using an Omega Bio-Tek E.Z.N.A. SP Plant DNA Kit, following manufacturer’s protocols (revision 2.0). DNA samples were then quality checked and quantified using Nanodrop 2000 (Thermo Fisher Scientific, Carlsbad, California, USA) and Qubit High Sensitivity (HS) assay (ThermoFisher Scientific, Oregon, USA). To ensure that all DNA samples were within a 400-500 base pair (bp) range, they were visualized on a 1% agarose gel in 1X TBE buffer. DNA fragment length was estimated by comparison to a 100 bp GeneRuler DNA ladder. Samples over 500 bp were sonicated with a QSonica (ThermoCube, New York, USA) until the DNA fragments were within the 400-500 bp range.
+Leaves were dried in silica beads after collection from live plants from the field or greenhouse. Dried leaf tissue (~20 mg) was ground using a Bead Mill 24 Homogenizer (ThermoFisher Scientific, Atlanta, Georgia, USA), and DNA was extracted using an Omega Bio-Tek E.Z.N.A. SP Plant DNA Kit (Atlanta, Georgia, USA), following manufacturer’s protocols (revision 2.0). DNA samples were then quality checked and quantified using Nanodrop 2000 (Thermo Fisher Scientific, Carlsbad, California, USA) and Qubit High Sensitivity (HS) assay (ThermoFisher Scientific, Oregon, USA). To ensure that all DNA samples were within a 400-500 base pair (bp) range, they were visualized on a 1% agarose gel in 1X TBE buffer. DNA fragment length was estimated by comparison to a 100 bp GeneRuler DNA ladder. Samples over 500 bp were sonicated with a QSonica (ThermoCube, New York, USA) until the DNA fragments were within the 400-500 bp range.
 
 Libraries were then prepared using a NEBNext Ultra II DNA Library Prep Kit and a NEBNext Multiplex Oligos for Illumina Kit. The NEBNext Ultra II Version 5 protocol with size selection of DNA fragments within a 300-400 bp range was followed. However, all amounts of reagents and DNA were halved from the original protocol to cut costs. Qubit HS assay was again used to quantify the samples.
 
-Target sequence capture using the custom probe set MyBaits Compositae-1061 kit [@mandel2014] from Arbor Biosciences was performed on the libraries following manufacturer’s protocols (version 2.3.1). This probe set is specifically designed for taxa within the *Asteraceae* family. Pools were created using five to seven libraries, with a goal of 150ng of DNA per individual library in the capture pools for the MyBaits reaction. Hybridization with the baits took place in the thermocycler for 36 hours at 62°C. The hybridized targets were recovered by Dynabeads M-280 Streptavidin beads following protocols developed by the manufacturer. A 1:4 ratio of each library was added to the pools after target capturing to obtain off-target plastid sequence data. Qubit HS assay was used to quantify the samples, and Agilent Bioanalyzer was used to quality check the captured pools. The pooled captures were shipped to Psomagen for Illumina Sequencing using NovaSeqX and HiSeqX machines. 
+Target sequence capture using the custom probe set MyBaits Compositae-1061 kit [@mandel2014] from Arbor Biosciences was performed on the libraries following manufacturer’s protocols (version 2.3.1). Pools were created using five to seven libraries, with a goal of 150 ng of DNA per individual library in the capture pools for the MyBaits reaction. Hybridization with the baits took place in the thermocycler for 36 hours at 62°C. The hybridized targets were recovered by Dynabeads M-280 Streptavidin beads (ThermoFisher Scientific, Vilnius, Lithuania) following protocols developed by the manufacturer. A 1:4 ratio of each library was added to the pools after target capturing to obtain off-target plastid sequence data. Qubit HS assay was used to quantify the samples, and Agilent Bioanalyzer (Agilent Technologies, Santa Clara, California, USA) was used to quality check the captured pools. The pooled captures were shipped to Psomagen for Illumina Sequencing using NovaSeqX and HiSeqX machines (Appendix S2). 
 
 
 # Bioinformatics
@@ -151,7 +144,7 @@ Throughout this guide, code chunks are labeled according to the programming lang
 
 **Recommended Directory Structure**
 
-Before beginning the workflow, establish a consistent project directory structure and install all required software. Organizing inputs, intermediate files, and outputs in a standardized way improves reproducibility and makes it easier to trace each analysis step.
+Before beginning the workflow, establish a consistent project directory structure. Organizing inputs, intermediate files, and outputs in a standardized way improves reproducibility and makes it easier to trace each analysis step.
 
 All commands in this workflow assume the following directory structure.
 
@@ -1109,15 +1102,17 @@ This step uses the following tools:
 
 Unlike datasets prepared for analyses of genetic diversity, SNP filtering for outgroup-based analyses should be more conservative:
 
-| **Pipeline Step** | **Apply** | **Notes** |
-|:---:|:---:|:---|
-| Alignment to reference genome | Yes | Must be identical for all samples |
-| SNP calling (`bcftools mpileup`/`bcftools call`) | Yes | Include the outgroup during variant calling |
-| Depth and quality filtering | Yes | Retains only reliable SNPs |
-| Biallelic SNP filtering | Yes | Required for most downstream tools |
-| Missing data filtering | Yes | Apply moderately (avoid overly strict thresholds) |
-| Minor allele frequency (MAF) filter | **No** | Rare alleles may be informative for ancestral state inference |
-| Linkage disequilibrium (LD) filter | **No** | Methods such as `TreeMix` account for LD internally |
+|                 **Pipeline Step**                | **Apply** | **Notes**                                                                                                                                           |
+| :----------------------------------------------: | :-------: | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
+|           Alignment to reference genome          |    Yes    | Must be performed consistently for all ingroup and outgroup samples.                                                                                |
+| SNP calling (`bcftools mpileup`/`bcftools call`) |    Yes    | Include the outgroup during variant calling so SNPs are called jointly across all samples.                                                          |
+|            Depth and quality filtering           |    Yes    | Retains only reliable SNPs supported by sufficient read depth and variant quality.                                                                  |
+|              Biallelic SNP filtering             |    Yes    | Retains biallelic SNPs and removes indels and multiallelic sites, which are not accepted by many downstream population genomic tools.               |
+|              Missing data filtering              |    Yes    | Apply a moderate threshold to reduce missingness while avoiding excessive removal of informative sites.                                             |
+|      Minor allele frequency (MAF) filtering      |   **No**  | Rare alleles may be informative for resolving relationships among ingroup and outgroup samples and should not be removed from the outgroup dataset. |
+|       Linkage disequilibrium (LD) filtering      |  Yes  | Apply LD pruning to reduce non-independence among tightly linked SNPs while retaining genome-wide ancestry and allele-frequency information.        |
+
+For the outgroup dataset, LD filtering was applied, but MAF filtering was not applied, allowing rare variants to be retained while reducing redundancy among highly correlated SNPs.
 
 ---
 
@@ -1298,8 +1293,9 @@ To retain high-quality and informative variants, apply the following filters:
 2. Quality (`QUAL >= 20`) — removes low-confidence calls
 3. Biallelic SNPs — removes invariant sites and indels
 4. Missing data (`≤ 0.25`) — removes poorly genotyped loci
+5. Linkage disequilibrium (`r² < 0.2`) — removes non-independent loci
 
-Do not filter based on minor allele frequency and do not prune SNPs based on linkage disequilibrium.
+Do not filter based on minor allele frequency.
 
 Filter by depth and quality:
 
@@ -1339,8 +1335,21 @@ awk -F'\t' '
 }' > Outgroup_SNPdataset_04_missingdata_body.vcf
 
 bcftools view -h Outgroup_SNPdataset_03_biallelic_snps.vcf.gz > Outgroup_SNPdataset_03_biallelic_snps_header.txt
-cat Outgroup_SNPdataset_03_biallelic_snps_header.txt Outgroup_SNPdataset_04_missingdata_body.vcf > Outgroup_SNPdataset_FinalFiltered.vcf.gz
+cat Outgroup_SNPdataset_03_biallelic_snps_header.txt Outgroup_SNPdataset_04_missingdata_body.vcf > Outgroup_SNPdataset_04_missingdata.vcf
 rm Outgroup_SNPdataset_04_missingdata_body.vcf
+```
+
+Prune based on linkage disequilibrium:
+
+```bash
+# bash
+bcftools annotate --set-id '%CHROM\_%POS' -o Outgroup_SNPdataset_04_missingdata_fixed.vcf -O v Outgroup_SNPdataset_04_missingdata.vcf
+
+plink --vcf Outgroup_SNPdataset_04_missingdata_fixed.vcf --indep-pairwise 50 10 0.2 --out thinned_snps --allow-extra-chr
+
+awk '{split($1, arr, "_"); print arr[1], arr[2]}' OFS='\t' thinned_snps.prune.in > snps_to_keep.txt
+
+bcftools view -T snps_to_keep.txt -o Outgroup_SNPdataset_FinalFiltered.vcf.gz -O z Outgroup_SNPdataset_04_missingdata_fixed.vcf
 ```
 
 This produces a dataset that preserves the full spectrum of genetic variation needed to infer ancestral states and population relationships. The output is the filtered outgroup dataset, `Outgroup_SNPdataset_FinalFiltered.vcf.gz`.
@@ -1381,15 +1390,17 @@ This step uses the following tools:
 
 **Filtering Strategy for Species-Separated Analyses**
 
-| **Pipeline Step** | **Apply** | **Notes** |
-|:---:|:---:|:---|
-| Alignment to reference genome | Yes | Must be identical for all samples |
-| SNP calling (`bcftools mpileup`/`bcftools call`) | Yes | Include all individuals within a species during variant calling |
-| Depth and quality filtering | Yes | Retains only reliable SNPs |
-| Biallelic SNP filtering | Yes | Required for most downstream tools |
-| Missing data filtering | Yes | Apply moderately (avoid overly strict thresholds) |
-| Minor allele frequency (MAF) filter | **No** | Rare alleles contribute to estimates of genetic diversity |
-| Linkage disequilibrium (LD) filter | **No** | Genetic diversity statistics do not require independent loci |
+|                 **Pipeline Step**                | **Apply** | **Notes**                                                                                                                                      |
+| :----------------------------------------------: | :-------: | :--------------------------------------------------------------------------------------------------------------------------------------------- |
+|           Alignment to reference genome          |    Yes    | Must be performed consistently for all individuals across datasets.                                                                            |
+| SNP calling (`bcftools mpileup`/`bcftools call`) |    Yes    | Include all individuals within the focal species during variant calling.                                                                       |
+|            Depth and quality filtering           |    Yes    | Retains only reliable SNPs supported by sufficient read depth and variant quality.                                                             |
+|              Biallelic SNP filtering             |    Yes    | Retains biallelic SNPs and removes indels and multiallelic sites, which are not accepted by many downstream population genomic tools.          |
+|              Missing data filtering              |    Yes    | Apply a moderate threshold to reduce missingness while retaining enough SNPs for within-species comparisons.                                   |
+|      Minor allele frequency (MAF) filtering      |   **No**  | Rare alleles are informative for estimates of genetic diversity, including private alleles, heterozygosity, and population-specific variation. |
+|       Linkage disequilibrium (LD) filtering      |   **No**  | LD pruning was not applied so that species-specific datasets retained the maximum number of informative SNPs for genetic diversity summaries.  |
+
+For the species-separated datasets, neither MAF filtering nor LD filtering was applied because rare and linked variants may contribute to estimates of within-species genetic diversity and population-specific variation.
 
 ---
 
@@ -2339,6 +2350,13 @@ optM_results <- optM(folder = folder)
 plot_optM(optM_results)
 dev.off()
 ```
+---
+
+**Example Results**
+
+```{r, echo=FALSE, fig.align='center'}
+knitr::include_graphics("./figures/OptM.jpeg")
+```
 
 ---
 
@@ -2412,6 +2430,14 @@ plot_resid(
 ```
 
 Residuals represent the difference between the observed covariance among populations and the covariance predicted by the fitted `TreeMix` model.
+
+---
+
+**Example Results**
+
+```{r, echo=FALSE, fig.align='center'}
+knitr::include_graphics("./figures/TreeMix.jpeg")
+```
 
 ---
 
@@ -2795,6 +2821,14 @@ This generates a plot showing excess allele sharing across branches of the guide
 
 ---
 
+**Example Results**
+
+```{r, echo=FALSE, fig.align='center'}
+knitr::include_graphics("./figures/F-Branch.jpeg")
+```
+
+---
+
 **Interpreting *f*-Branch Results**
 
 Branches with elevated *f*-branch values indicate excess allele sharing that may be consistent with introgression. These results are useful for identifying which branches, rather than only terminal populations, show evidence of gene flow.
@@ -2805,6 +2839,14 @@ Branches with elevated *f*-branch values indicate excess allele sharing that may
 - *f4*-ratio estimates
 - TreeMix migration edges
 - PCA and ADMIXTURE patterns
+
+---
+
+# Conclusion
+
+Genome-wide SNP datasets provide several advantages over microsatellite markers for population and conservation genomic studies. Whereas microsatellite analyses typically rely on a relatively small number of highly polymorphic loci [@guichoux2011], target-capture sequencing can generate thousands of SNPs distributed across hundreds of loci [@grover2012], substantially increasing statistical power for estimating genetic diversity, detecting fine-scale population structure, and inferring demographic history and gene flow. This expanded genomic representation also enables analyses that are difficult or impossible with microsatellite datasets, including tests of historical introgression and migration using approaches such as TreeMix and f-statistics, providing novel information for these groups. 
+
+Although reduced-representation approaches such as Restriction-site-Associated DNA sequencing (RADseq) similarly generate genome-wide SNPs, target-capture offers several practical advantages, including more consistent recovery of homologous loci across samples, improved reproducibility among sequencing runs and studies, and compatibility with lower-quality or degraded DNA [@bose2018], making it particularly well suited for conservation applications and non-model taxa. Together, these advantages demonstrate that target-capture datasets can serve as a powerful resource for population genomic analyses while also leveraging data originally generated for phylogenomic studies.
 
 ---
 
