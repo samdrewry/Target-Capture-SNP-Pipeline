@@ -77,8 +77,4 @@ If using this workflow, please cite the associated manuscript or repository. Cit
 
 ## Contact
 
-For questions about this pipeline, please contact:
-
-Samantha G. Drewry
-Erika R. Moore-Pollard
-Jennifer R. Mandel
+For questions about this pipeline, please post an issue or email **Samantha G. Drewry** (sgdrewry@memphis.edu), **Erika R. Moore-Pollard** (moore.erika.r@gmail.com), or **Jennifer R. Mandel** (jmandel@memphis.edu).
