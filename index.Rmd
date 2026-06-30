@@ -13,7 +13,7 @@ csl: apa.csl
 
 ^1^ Department of Biological Sciences, University of Memphis, 3700 Walker Ave, Memphis, Tennessee 38152, USA
 
-^2^ Department of Ecology and Evolutionary Biology, University of Connecticut, 75 N Eagleville Rd, Unit 3043, Storrs, CT 06269, USA
+^2^ Department of Ecology & Evolutionary Biology, University of Connecticut, 75 N Eagleville Rd, Unit 3043, Storrs, CT 06269, USA
 
 ^3^ ACRE: Institute for Agricultural and Conservation Research and Education, University of Memphis, Memphis, Tennessee 38152, USA
 
@@ -36,34 +36,21 @@ Helianthus_sp_Locations <- read.csv("Helianthus sp. Locations.csv")
 ```
 
 # Introduction
-Advances in second-generation sequencing technologies have transformed population genomic research by enabling researchers to generate genome-scale datasets for non-model organisms with increasing efficiency and affordability. These datasets provide unprecedented opportunities to investigate genetic diversity, population structure, demographic history, and evolutionary relationships across a wide range of biological systems, including both well-studied and understudied systems. As genomic datasets become increasingly accessible, population genomic approaches are playing an ever expanding role in evolutionary biology, ecology, and conservation management [@supple2018]. 
 
-One particularly important application of population genomics is in conservation genetics, where assessing the amount and distribution of genetic variation within and among populations can inform management strategies for rare and endangered species. Conservation actions often aim to preserve as much existing genetic diversity as possible through in situ protection or ex situ conservation efforts, such as seed banking and cultivation in botanic gardens [@rajasekharan2015]. Historically, conservation genetic studies have relied on a limited number of molecular markers, most commonly microsatellites, also known as Simple Sequence Repeats (SSRs) or short tandem repeats (STRs; [@merritt2015; @vieira2016]), to estimate population genetic parameters and identify conservation units [@muneer2014; @supple2018]. Although these approaches have proven valuable in many studies (e.g., [@ellis2007; @thapa2019; @krak2020; @vlasta2020]), analyses based on relatively few loci may have limited power to detect fine-scale population structure or complex evolutionary histories. Genome-wide datasets consisting of thousands of single nucleotide polymorphisms (SNPs) can provide more precise estimates of genetic diversity  [@luikart2003; @allendorf2010; @frankham2010; @hoffmann2015; @shafer2015; @benestan2016; @supple2018], improve resolution in clustering analyses [@morin2012; @langin2018; @lemopoulos2019; @zimmerman2020], and in some cases lead to conservation recommendations that differ from those based on smaller marker sets [@mccartney2018genomic; @mccartney2018population; @supple2018]. 
+Genome-wide SNP datasets provide several advantages over microsatellite markers for population and conservation genomic studies. Whereas microsatellite analyses typically rely on a relatively small number of highly polymorphic loci [@guichoux2011], target-capture sequencing can generate thousands of SNPs distributed across hundreds of loci [@grover2012], substantially increasing statistical power for estimating genetic diversity, detecting fine-scale population structure, and inferring demographic history and gene flow. This expanded genomic representation also enables analyses that are difficult or impossible with microsatellite datasets, including tests of historical introgression and migration using approaches such as TreeMix and f-statistics, providing novel information for these groups. 
 
-Advances in second-generation sequencing technologies have made genome-scale datasets increasingly accessible for non-model organisms, expanding the potential for genomic approaches in conservation biology. Among these approaches, target-capture sequencing (also known as target-enrichment, hybrid-enrichment, or HybSeq; @weitemier2014) has become widely used in phylogenomic studies because it allows researchers to sequence hundreds to thousands of genes across many samples in a cost-effective and scalable manner [@mertes2011]. While target-capture data are typically generated to reconstruct phylogenetic relationships, these datasets also contain abundant SNP variation that can be leveraged for population genomic analyses [@nauheimer2021; @frost2024; @walden2026]. Despite this potential, target-capture sequencing is less commonly applied in conservation population genomics as compared with reduced-representation approaches such as Restriction site-Associated DNA sequencing (RADseq). RADseq has been widely adopted because it enables the discovery and genotyping of thousands of genome-wide SNPs without requiring extensive genomic resources. However, RADseq datasets can suffer from locus dropout caused by mutations at restriction enzyme cut sites, resulting in substantial missing data and reduced comparability among individuals or divergent populations [@nunziata2018; @huhn2022; @atsawawaranunt2026]. In addition, the loci recovered in RADseq datasets often heavily depend on library preparation parameters and bioinformatic filtering, limiting reproducibility and the ability to integrate datasets across studies [@o2018]. Target-capture sequencing offers a promising alternative because it captures predefined genes that can be consistently recovered across individuals while simultaneously generating large numbers of SNPs [@harvey2016], increasing the possibility that datasets originally generated for phylogenomic studies could also be leveraged for conservation genomics.
+Although reduced-representation approaches such as Restriction-site-Associated DNA sequencing (RADseq) similarly generate genome-wide SNPs, target-capture offers several practical advantages, including more consistent recovery of homologous loci across samples, improved reproducibility among sequencing runs and studies, and compatibility with lower-quality or degraded DNA [@bose2018], making it particularly well suited for conservation applications and non-model taxa. Together, these advantages demonstrate that target-capture datasets can serve as a powerful resource for population genomic analyses while also leveraging data originally generated for phylogenomic studies.
 
-Another barrier to broader adoption is the lack of accessible and reproducible bioinformatic workflows for extracting and analyzing SNP datasets from target-capture data, particularly for researchers or conservation practitioners without extensive computational experience. Developing workflows that enable researchers to efficiently generate SNP datasets from target-capture sequencing could help bridge this gap and expand the use of genomic data in conservation studies. Because target-capture probe sets are often designed to work across broad taxonomic groups, such as plant families (e.g., Asteraceae, [@mandel2014; @moore2024] ; Orchidaceae, [@eserman2021]; Rubiaceae, [@ball2023]; Asparagaceae, [@bentz2024], these datasets can be readily applied to a wide range of species, including rare or endangered taxa for which genomic resources are limited. Moreover, target-capture approaches can produce datasets that are comparable across studies and scalable to large sample sizes, making them particularly useful for evaluating genetic diversity and population structure in conservation contexts. Providing clear and reproducible pipelines for processing these data therefore has the potential to make genomic analyses more accessible to a broader community of researchers and conservation managers.
+# Applicability to this Workflow 
 
-
-# Study System: *Helianthus verticillatus* and Relatives
-
-*Helianthus verticillatus* Small (Asteraceae), also known as the whorled sunflower, provides an ideal system for demonstrating the application of such approaches. This perennial diploid species is federally listed as endangered and is endemic to the southeastern United States [@matthews2002]. Only four populations in Alabama, Georgia, and two counties in Tennessee (McNairy Co. and Madison Co.) were known for many years following its rediscovery in the 1990s, prompting initial conservation genetic studies using microsatellite markers to evaluate patterns of genetic diversity and population structure [@ellis2006; @mandel2010]. These studies provided important insights into the distribution of genetic variation among populations and informed conservation management decisions in various states, leading to its federally endangered status in 2014 [@usfws2014]. Following that work, additional populations were discovered in Mississippi and Virginia in 2017 and 2019, respectively. These discoveries prompted more population genetic work which found that the Mississippi (hereafter referred to as whorled-Marshall or ‘w-Marshall’) and Virginia sites harbor novel genetic variation in comparison to the previously known populations, and w-Marshall harbored the most private alleles of all populations tested [@moore2022]. These results led to annual land surveys in Mississippi with hopes to find more populations that may explain this variation.
-
-In 2022, additional populations were discovered in Mississippi, with larger populations found in the Yazoo-Mississippi Delta (hereafter ‘Delta’) region that is nestled between the Mississippi and Yazoo rivers (USA) [@cobb1994], as well as some smaller populations in the northern portion of the state (hereafter ‘Northern Mississippi’). However, these populations exhibited unexpected phenotypes compared to typical *H. verticillatus*, and had intermediate morphologies between *H. verticillatus* and *Helianthus grosseserratus* M.Martens [@heiser1969], a closely related species found in the central to eastern regions of North America [@stephens2015]. Given that both species have overlapping ranges, and that *H. verticillatus* was once hypothesized to have a hybrid origin with other *Helianthus* species, including *H. grossesserratus* [@beatley1963; @heiser1969; @cronquist2001; @matthews2002], there is a need to reassess patterns of genetic diversity and population structure across this species using genome-scale data.
-
-## Applicability to this Workflow 
-
-In this study, we demonstrate an accessible and reproducible workflow for generating and analyzing SNP datasets derived from target-capture sequencing data in a conservation genomics framework. Using *H. verticillatus* as a case study, we evaluate genetic diversity and population structure across multiple previously known and newly discovered populations in Mississippi (hereafter referred to as *Helianthus* sp.), and compare our results with previous conservation genetic analyses based on microsatellites. By providing a transparent pipeline that can be applied to any species or target-capture probe set, this study illustrates how target-capture datasets can be leveraged to address conservation genomic questions and inform management decisions for rare and endangered species.
+In this study, we demonstrate an accessible and reproducible workflow for generating and analyzing SNP datasets derived from target-capture sequencing data in a conservation genomics framework. Using *H. verticillatus* and its relatives as a case study, we evaluate genetic diversity and population structure across multiple previously known and newly discovered populations in Mississippi (hereafter referred to as *Helianthus* sp.), and compare our results with previous conservation genetic analyses based on microsatellites. By providing a transparent pipeline that can be applied to any species or target-capture probe set, this study illustrates how target-capture datasets can be leveraged to address conservation genomic questions and inform management decisions for rare and endangered species.
 
 
 # Sampling
 
-## Distribution Data
+Leaf tissue was sampled from all known wild populations of *Helianthus verticillatus*: Alabama1, Alabama2, Georgia, McNairy (Tennessee), Pinson (Tennessee), w-Marshall (Mississippi), and Virginia. Seeds were obtained from the two available accessions of *H. verticillatus* maintained by the United States Department of Agriculture–Agricultural Research Service (USDA-ARS). Leaf tissue was sampled from all known populations of *Helianthus* sp. in Mississippi: Belzonia, Benton, Greenwood, Grenada, Marshall, and Tchula. Additionally, seeds were obtained from eight USDA-ARS accessions of *H. grosseserratus* populations, spanning its geographic range: Illinois, Iowa, Kansas, Mississippi, Nebraska, North Dakota, Oklahoma, and Wisconsin. Some downstream analyses require the inclusion of an outgroup, so a single individual of *Helianthus schweinitzii* Torr. & A.Gray was included.
 
-Leaf tissue was sampled from all known wild populations of *Helianthus verticillatus*: Alabama, Georgia, McNairy (Tennessee), Pinson (Tennessee), w-Marshall (Mississippi), and Virginia. This study recognizes Alabama as having two subpopulations, Alabama1 and Alabama2, due to previously observed ecological and morphological differences (see [@mandel2010]). Seeds were obtained from the two available accessions of *H. verticillatus* maintained by the United States Department of Agriculture–Agricultural Research Service (USDA-ARS). Leaf tissue was sampled from all known populations of *Helianthus* sp. in Mississippi: Belzonia, Benton, Greenwood, Grenada, Marshall, and Tchula. Additionally, seeds were obtained from eight USDA-ARS accessions of *H. grosseserratus* populations, spanning its geographic range: Illinois, Iowa, Kansas, Mississippi, Nebraska, North Dakota, Oklahoma, and Wisconsin. *Helianthus grosseserratus* was included because of its overlapping range and suspected hybridizations with *H. verticillatus* [@beatley1963; @heiser1969; @cronquist2001; @matthews2002]. Some downstream analyses require the inclusion of an outgroup, so a single individual of *Helianthus schweinitzii* Torr. & A.Gray was included.
-
-
-The sampling map features the *H. verticillatus* population locations at their county centroids, since the species is federally endangered.
+The sampling map features the *H. verticillatus* population locations at their county centroids, since the species is federally endangered and exact locality information cannot be shared.
 
 ```{r heli_map, echo = FALSE, out.width="100%", out.height="1000px"}
 Helianthuspalette <- colorFactor(
@@ -125,20 +112,15 @@ Helianthusmap1 <- leaflet(Helianthus_sp_Locations) %>%
 Helianthusmap1
 ```
 
-# DNA Extraction and Sequencing
+# Using this Guide
 
-Leaves were dried in silica beads after collection from live plants from the field or greenhouse. Dried leaf tissue (~20 mg) was ground using a Bead Mill 24 Homogenizer (ThermoFisher Scientific, Atlanta, Georgia, USA), and DNA was extracted using an Omega Bio-Tek E.Z.N.A. SP Plant DNA Kit (Atlanta, Georgia, USA), following manufacturer’s protocols (revision 2.0). DNA samples were then quality checked and quantified using Nanodrop 2000 (Thermo Fisher Scientific, Carlsbad, California, USA) and Qubit High Sensitivity (HS) assay (ThermoFisher Scientific, Oregon, USA). To ensure that all DNA samples were within a 400-500 base pair (bp) range, they were visualized on a 1% agarose gel in 1X TBE buffer. DNA fragment length was estimated by comparison to a 100 bp GeneRuler DNA ladder. Samples over 500 bp were sonicated with a QSonica (ThermoCube, New York, USA) until the DNA fragments were within the 400-500 bp range.
+Here are some tips for utilizing this guide.
 
-Libraries were then prepared using a NEBNext Ultra II DNA Library Prep Kit and a NEBNext Multiplex Oligos for Illumina Kit. The NEBNext Ultra II Version 5 protocol with size selection of DNA fragments within a 300-400 bp range was followed. However, all amounts of reagents and DNA were halved from the original protocol to cut costs. Qubit HS assay was again used to quantify the samples.
+---
 
-Target sequence capture using the custom probe set MyBaits Compositae-1061 kit [@mandel2014] from Arbor Biosciences was performed on the libraries following manufacturer’s protocols (version 2.3.1). Pools were created using five to seven libraries, with a goal of 150 ng of DNA per individual library in the capture pools for the MyBaits reaction. Hybridization with the baits took place in the thermocycler for 36 hours at 62°C. The hybridized targets were recovered by Dynabeads M-280 Streptavidin beads (ThermoFisher Scientific, Vilnius, Lithuania) following protocols developed by the manufacturer. A 1:4 ratio of each library was added to the pools after target capturing to obtain off-target plastid sequence data. Qubit HS assay was used to quantify the samples, and Agilent Bioanalyzer (Agilent Technologies, Santa Clara, California, USA) was used to quality check the captured pools. The pooled captures were shipped to Psomagen for Illumina Sequencing using NovaSeqX and HiSeqX machines (Appendix S2). 
+**Programming Languages**
 
-
-# Bioinformatics
-
-**Using this Guide**
-
-Throughout this guide, code chunks are labeled according to the programming language in which they should be executed. Commands enclosed in `bash` code blocks are intended to be run from a Linux command line or high-performance computing environment, whereas code enclosed in `r` code blocks should be executed within R or RStudio. Distinguishing between these environments is intended to improve reproducibility and provide readers with clear guidance on where each step of the workflow should be performed.
+Throughout this guide, code chunks are labeled according to the programming language in which they should be executed. Commands enclosed in `bash` code blocks are intended to be run from a Linux command line or high-performance computing (HPC) environment, whereas code enclosed in `r` code blocks should be executed within R or RStudio. This guide was developed using R version 4.3.2. Distinguishing between these environments is intended to provide readers with clear guidance on where each step of the workflow should be performed.
 
 ---
 
@@ -211,19 +193,7 @@ module load plink
 module load R
 ```
 
-For software that cannot be loaded through environmental modules, or for users that are not working on an HPC, install software packages within:
-
-```
-/Project/Tools/
-```
-
-Examples:
-
-```
-/Project/Tools/BCFtools/
-/Project/Tools/PLINK/
-/Project/Tools/ADMIXTURE/
-```
+Software that cannot be loaded through an environmental module should be installed according to the instructions provided for each package.
 
 ---
 
@@ -257,13 +227,13 @@ knitr::include_graphics("./figures/Workflow Diagram.jpeg")
 
 **Reproducibility Recommendations**
 
-To maximize reproducibility:
+To maximize reproducibility, the user should:
 
 - Record software versions used throughout the workflow.
 - Maintain the recommended directory structure.
 - Use consistent sample names across all files.
 
-Documenting software versions is strongly recommended:
+Documenting software versions is strongly recommended. For example:
 
 ```
 bcftools --version
@@ -275,9 +245,9 @@ These version numbers should be reported alongside published results whenever po
 
 ---
 
-## Prepare Reads for Alignment
+# Prepare Reads for Alignment
 
-### Evaluate Raw Read Quality
+## Evaluate Raw Read Quality
 
 Before beginning downstream analyses, assess the quality of raw sequencing reads. FASTQ files commonly contain adapter contamination and low-quality bases, which can negatively affect read alignment and SNP calling.
 
@@ -345,7 +315,7 @@ Open the resulting `multiqc_report.html` file in a web browser to review results
 **Interpretation of `FastQC` Metrics**
 
 | Metric | What to Look For |
-|:---:|:---|
+|:---:|:---:|
 | Per-base sequence quality | Most bases should have Phred scores > 20 |
 | Adapter content | Presence of adapters indicates trimming is needed |
 | Per-sequence GC content | Should match the expected distribution for the organism |
@@ -353,7 +323,7 @@ Open the resulting `multiqc_report.html` file in a web browser to review results
 
 ---
 
-### Remove Adapters and Low-Quality Reads
+## Remove Adapters and Low-Quality Reads
 
 After evaluating raw read quality, remove adapter sequences and low-quality bases using `Trimmomatic`. This step improves downstream alignment and variant calling by retaining only high-quality sequence data.
 
@@ -383,13 +353,13 @@ These should be the original raw FASTQ files, which are located in `/Project/Raw
 The following files are written to `/Project/Trimming/`:
 
 | File | Description |
-|:---:|:---|
+|:---:|:---:|
 | `*_R1.tp.fastq.gz` | Forward reads that remain paired after trimming |
 | `*_R2.tp.fastq.gz` | Reverse reads that remain paired after trimming |
 | `*_R1.tunp.fastq.gz` | Forward reads whose pair was removed during trimming |
 | `*_R2.tunp.fastq.gz` | Reverse reads whose pair was removed during trimming |
 
-Most downstream analyses use only the paired reads.
+Most downstream analyses use only the paired reads (`*.tp.fastq.gz`).
 
 ---
 
@@ -398,7 +368,7 @@ Most downstream analyses use only the paired reads.
 The following trimming parameters are applied:
 
 | Parameter | Description |
-|:---:|:---|
+|:---:|:---:|
 | `ILLUMINACLIP:TruSeq3-PE.fa:2:30:10` | Removes Illumina TruSeq adapter sequences |
 | `LEADING:20` | Removes low-quality bases (`Q < 20`) from the beginning of reads |
 | `TRAILING:20` | Removes low-quality bases (`Q < 20`) from the end of reads |
@@ -442,7 +412,7 @@ done
 
 ---
 
-### Confirm Quality After Trimming
+## Confirm Quality After Trimming
 
 After trimming, reassess read quality to confirm that adapter contamination and low-quality bases have been successfully removed. This step ensures that only high-quality reads proceed to alignment and downstream analyses.
 
@@ -514,13 +484,13 @@ Compare the pre- and post-trimming `MultiQC` reports:
 
 ---
 
-## Align Reads to the Reference Genome
+# Align Reads to the Reference Genome
 
 After trimming, align sequencing reads to a reference genome to determine their likely genomic origin. This step is required for downstream SNP discovery and genotyping.
 
 For this study, reads were aligned to the *Helianthus annuus* reference genome (Ha412HOv2.0), available from the Sunflower Genome Database (https://sunflowergenome.org/) [@badouin2017; @huang2023; @todesco2020]. A reference genome is not currently available for either *H. grosseserratus* or *H. verticillatus*, so *H. annuus* was used as the closest available high-quality reference assembly.
 
-Choose a reference genome appropriate for your system.
+Choose a reference genome appropriate for your study system. A great resource to find which genomes are currently available for your system is [PubPlant](https://www.plabipd.de/plant_genomes_pa.ep).
 
 ---
 
@@ -558,7 +528,7 @@ The following files are written to `/Project/Alignment/`:
 
 ---
 
-### Index the Reference Genome
+## Index the Reference Genome
 
 Before reads are aligned, index the reference genome, which creates files that allow the alignment software to efficiently search the genome.
 
@@ -592,7 +562,7 @@ This generates a set of indexed files with the prefix `ReferenceGenome`, which `
 
 ---
 
-### Align Trimmed Reads
+## Align Trimmed Reads
 
 Align the trimmed paired-end reads to the indexed reference genome. Only the paired trimmed reads (`*.tp.fastq`) are used in this workflow. Reads that became unpaired during trimming are excluded from the alignment. To avoid duplicating large files, the trimmed reads remain in the `/Project/Trimming/` folder and are referenced directly during alignment.
 
@@ -603,7 +573,7 @@ Align the trimmed paired-end reads to the indexed reference genome. Only the pai
 The following alignment parameters are applied:
 
 | Parameter | Description |
-|:---:|:---|
+|:---:|:---:|
 | `--end-to-end` | Requires the entire read to align to the reference |
 | `--sensitive` | Preset that increases alignment sensitivity |
 | `-p 24` | Uses 24 CPU threads to speed up alignment |
@@ -628,7 +598,7 @@ Align paired-end reads using `Bowtie2`, and process the alignments using `SAMtoo
 
 ```bash
 # bash
-for file1 in /Project/Trimming/*R1.tp.fastq
+for file1 in /Project/Trimming/*R1.tp.fastq.gz
 do
     file2=${file1/R1/R2}
     filename=$(basename ${file1%%_R*})
@@ -666,7 +636,7 @@ This process allows reads to be placed at specific genomic positions, which is e
 
 ---
 
-## Call and Filter SNPs
+# Call and Filter SNPs
 
 Single nucleotide polymorphisms (SNPs) are one of the most widely used genetic markers in population genomics. After aligning reads to the reference genome, identify variant sites across all samples using `BCFtools`.
 
@@ -706,7 +676,7 @@ The following files are written to `/Project/Alignment/`:
 
 ---
 
-### Call Raw SNPs
+## Call Raw SNPs
 
 Identify variants using the `BCFtools` functions `mpileup` and `call` by comparing aligned reads in the BAM files to the reference genome.
 
@@ -735,7 +705,7 @@ bcftools index SNPdataset_raw.vcf.gz
 The following parameters are applied:
 
 | Parameter | Description |
-|:---:|:---|
+|:---:|:---:|
 | `-f` | Specifies the reference genome in FASTA format |
 | `-Ou` | Outputs an uncompressed BCF stream suitable for piping into the `call` command |
 | `-v` | Restricts output to variant sites only |
@@ -746,7 +716,7 @@ The output `SNPdataset_raw.vcf.gz` contains all variant sites identified in the 
 
 ---
 
-### Fix Missing Genotypes
+## Fix Missing Genotypes
 
 Some VCF files have genotypes like `0/0:0,0,0` that `BCFtools` does not recognize as missing. Reformat these to `./.` before filtering can begin.
 
@@ -783,11 +753,11 @@ Verify that no incorrect missing genotypes remain:
 grep '0/0:0,0,0\|0/1:0,0,0\|1/1:0,0,0' SNPdataset_01_fix_missingGT.vcf
 ```
 
-If this command returns any output, an error remains in the file.
+If this command returns any output, an error remains in the file and will need to be investigated further.
 
 ---
 
-### Filter SNPs
+## Filter SNPs
 
 To retain high-quality and informative variants, the following filters are applied:
 
@@ -1070,15 +1040,13 @@ The final filtered dataset, `SNPdataset_FinalFiltered.vcf.gz`, represents a high
 - Excludes rare variants that may represent sequencing artifacts.
 - Contains loci that are approximately independent following LD pruning.
 
-These filtering steps collectively ensure that the dataset is appropriate for downstream population genomic analyses, including principal component analysis (PCA), admixture inference, and population differentiation metrics such as F<sub>ST</sub>.
-
 By retaining intermediate files throughout the pipeline, users can also evaluate how each filtering step impacts SNP retention and adjust parameters as needed for their specific study system.
 
-This final dataset serves as the foundation for all subsequent analyses in this workflow.
+Together, these filtering steps ensure that the dataset is suitable for downstream population genomic analyses. This filtered dataset is hereafter referred to as the “Ingroup dataset,” as it includes all study individuals except the outgroup taxon.
 
 ---
 
-## Outgroup Dataset
+# Generate an Outgroup Dataset
 
 Some downstream population genomic analyses (e.g., `TreeMix`, ABBA-BABA tests) require the inclusion of an outgroup to infer the direction of allele frequency changes and root population relationships. An outgroup is a sample or population that is phylogenetically outside the group of interest but still closely related enough to allow meaningful comparison.
 
@@ -1103,7 +1071,7 @@ This step uses the following tools:
 Unlike datasets prepared for analyses of genetic diversity, SNP filtering for outgroup-based analyses should be more conservative:
 
 |                 **Pipeline Step**                | **Apply** | **Notes**                                                                                                                                           |
-| :----------------------------------------------: | :-------: | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
+| :----------------------------------------------: | :-------: | :--------------------------------------------------------------------------------------------------------------------------------------------------: |
 |           Alignment to reference genome          |    Yes    | Must be performed consistently for all ingroup and outgroup samples.                                                                                |
 | SNP calling (`bcftools mpileup`/`bcftools call`) |    Yes    | Include the outgroup during variant calling so SNPs are called jointly across all samples.                                                          |
 |            Depth and quality filtering           |    Yes    | Retains only reliable SNPs supported by sufficient read depth and variant quality.                                                                  |
@@ -1141,7 +1109,7 @@ The following file is written to `/Project/OutgroupDataset/`:
 
 ---
 
-### Recommended Workflow
+## Recommended Workflow
 
 To generate a dataset suitable for outgroup-based analyses, follow the workflow outlined below. It is similar to the workflow described previously, with modifications to the SNP filtering step.
 
@@ -1203,7 +1171,7 @@ Align paired-end reads using `Bowtie2` and process the alignments using `SAMtool
 
 ```bash
 # bash
-for file1 in /Project/OutgroupDataset/*R1.tp.fastq
+for file1 in /Project/OutgroupDataset/*R1.tp.fastq.gz
 do
     file2=${file1/R1/R2}
     filename=$(basename ${file1%%_R*})
@@ -1368,7 +1336,7 @@ These methods depend on the outgroup to distinguish ancestral and derived allele
 
 ---
 
-## Generate Species-Specific Datasets
+# Generate Species-Specific Datasets
 
 Several downstream analyses in this workflow focus on genetic diversity within species rather than among species. Examples include pairwise F<sub>ST</sub>, observed heterozygosity (H<sub>O</sub>), expected heterozygosity (H<sub>E</sub>), and inbreeding coefficients (F<sub>IS</sub>).
 
@@ -1391,7 +1359,7 @@ This step uses the following tools:
 **Filtering Strategy for Species-Separated Analyses**
 
 |                 **Pipeline Step**                | **Apply** | **Notes**                                                                                                                                      |
-| :----------------------------------------------: | :-------: | :--------------------------------------------------------------------------------------------------------------------------------------------- |
+| :----------------------------------------------: | :-------: | :---------------------------------------------------------------------------------------------------------------------------------------------: |
 |           Alignment to reference genome          |    Yes    | Must be performed consistently for all individuals across datasets.                                                                            |
 | SNP calling (`bcftools mpileup`/`bcftools call`) |    Yes    | Include all individuals within the focal species during variant calling.                                                                       |
 |            Depth and quality filtering           |    Yes    | Retains only reliable SNPs supported by sufficient read depth and variant quality.                                                             |
@@ -1430,7 +1398,7 @@ These VCF files are subsequently used in the Genetic Diversity Statistics sectio
 
 ---
 
-### Recommended Workflow
+## Recommended Workflow
 
 To generate species-separated datasets, follow the workflow outlined below. It is similar to the workflow described previously, with modifications to the SNP filtering step.
 
@@ -1586,7 +1554,7 @@ Each species is analyzed independently using its corresponding species-specific 
 
 ---
 
-## Create Metadata Files
+# Create Metadata Files
 
 Several analyses require metadata files linking sample IDs to species or population assignments. To reduce assignment errors, create these files once and reuse them throughout the workflow. Create the following files in `/Project/Alignment/`.
 
@@ -1668,7 +1636,7 @@ knitr::include_graphics("./figures/sample_names_by_population_outgroup.png")
 
 ---
 
-# Investigating Genetic Diversity and Population Structure
+# Investigate Genetic Diversity and Population Structure
 
 To characterize patterns of genetic diversity and population structure within the study system, multiple population genomic analyses were conducted.
 
@@ -1815,7 +1783,7 @@ knitr::include_graphics("./figures/PCA for RMarkdown.png")
 
 **Interpretation**
 
-- Samples that cluster together share similar genetic variation.
+- Samples that cluster closer together share similar genetic variation.
 - Separation along principal components reflects genetic differentiation.
 - The percentage values on each axis represent the proportion of total genetic variation explained.
 
@@ -1858,7 +1826,7 @@ The following files are written to `/Project/ADMIXTURE/`:
 - `ADMIXTURE.tiff` — ADMIXTURE barplots
 - `.Q` files — ancestry proportions per individual
 - `.P` files — allele frequencies per cluster
-- Cross-validation (CV) error values
+- `CV_errors.txt` — cross-validation (CV) error values
 
 ---
 
@@ -2197,7 +2165,7 @@ These results should be interpreted alongside PCA, ADMIXTURE, and neighbor-joini
 
 ---
 
-# Investigating Gene Flow
+# Investigate Gene Flow
 
 Previous analyses (PCA, ADMIXTURE, neighbor-joining trees, and genetic diversity statistics) characterize patterns of genetic structure within the dataset. However, these approaches do not explicitly model historical gene flow among populations.
 
@@ -2637,7 +2605,7 @@ The output file `F3_statistics` contains the *f3*-statistics and associated Z-sc
 **Interpreting *f3*-Statistics**
 
 | **Result** | **Interpretation** |
-|:---|:---|
+|:---|:---:|
 | Significantly negative *f3* | Evidence that the target population is admixed |
 | Positive *f3* | No evidence for admixture in that tested configuration |
 | Large absolute Z-score | Stronger statistical support |
@@ -2752,7 +2720,7 @@ This command calculates both *D*-statistics and *f4*-ratio statistics for popula
 **Interpreting `Dsuite` Output**
 
 | **Output** | **Interpretation** |
-|:---|:---|
+|:---|:---:|
 | *D*-statistic | Direction and magnitude of excess allele sharing |
 | Z-score | Statistical support for deviation from the null hypothesis |
 | *f4*-ratio | Estimated admixture proportion |
@@ -2844,9 +2812,7 @@ Branches with elevated *f*-branch values indicate excess allele sharing that may
 
 # Conclusion
 
-Genome-wide SNP datasets provide several advantages over microsatellite markers for population and conservation genomic studies. Whereas microsatellite analyses typically rely on a relatively small number of highly polymorphic loci [@guichoux2011], target-capture sequencing can generate thousands of SNPs distributed across hundreds of loci [@grover2012], substantially increasing statistical power for estimating genetic diversity, detecting fine-scale population structure, and inferring demographic history and gene flow. This expanded genomic representation also enables analyses that are difficult or impossible with microsatellite datasets, including tests of historical introgression and migration using approaches such as TreeMix and f-statistics, providing novel information for these groups. 
-
-Although reduced-representation approaches such as Restriction-site-Associated DNA sequencing (RADseq) similarly generate genome-wide SNPs, target-capture offers several practical advantages, including more consistent recovery of homologous loci across samples, improved reproducibility among sequencing runs and studies, and compatibility with lower-quality or degraded DNA [@bose2018], making it particularly well suited for conservation applications and non-model taxa. Together, these advantages demonstrate that target-capture datasets can serve as a powerful resource for population genomic analyses while also leveraging data originally generated for phylogenomic studies.
+We hope that this workflow helps make it easier for people to utilize target-capture sequencing data in studies of population genomics, especially with non-model organiams and taxa of conversation concern.
 
 ---
 
