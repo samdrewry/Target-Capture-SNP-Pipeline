@@ -13,16 +13,6 @@ This workflow was developed for target-capture population genomic data generated
 * Preparing datasets for downstream population genomic analyses
 * Running PCA, ADMIXTURE, TreeMix, and D- and f-statistics analyses
 
-## Repository Structure
-
-```text
-Target-Capture-SNP-Pipeline/
-├── figures/           # Figures generated from analyses
-├── docs/              # Rendered files for GitHub Pages
-├── index.Rmd          # Main R Markdown tutorial
-└── README.md          # Repository overview
-```
-
 ## Getting Started
 
 The rendered tutorial can be viewed online without downloading the repository or opening RStudio:
@@ -87,8 +77,4 @@ If using this workflow, please cite the associated manuscript or repository. Cit
 
 ## Contact
 
-For questions about this pipeline, please contact:
-
-Samantha G. Drewry
-Erika R. Moore-Pollard
-Jennifer R. Mandel
+For questions about this pipeline, please post an issue or email **Samantha G. Drewry** (sgdrewry@memphis.edu), **Erika R. Moore-Pollard** (moore.erika.r@gmail.com), or **Jennifer R. Mandel** (jmandel@memphis.edu).
