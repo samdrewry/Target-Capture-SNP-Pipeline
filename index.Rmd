@@ -37,20 +37,20 @@ Helianthus_sp_Locations <- read.csv("Helianthus sp. Locations.csv")
 
 # Introduction
 
-Genome-wide SNP datasets provide several advantages over microsatellite markers for population and conservation genomic studies. Whereas microsatellite analyses typically rely on a relatively small number of highly polymorphic loci [@guichoux2011], target-capture sequencing can generate thousands of SNPs distributed across hundreds of loci [@grover2012], substantially increasing statistical power for estimating genetic diversity, detecting fine-scale population structure, and inferring demographic history and gene flow. This expanded genomic representation also enables analyses that are difficult or impossible with microsatellite datasets, including tests of historical introgression and migration using approaches such as TreeMix and f-statistics, providing novel information for these groups. 
+Genome-wide SNP datasets provide several advantages over microsatellite markers for population and conservation genomic studies. Whereas microsatellite analyses typically rely on a relatively small number of highly polymorphic loci [@guichoux2011], target-capture sequencing datasets can have thousands of SNPs distributed across hundreds of loci [@grover2012], substantially increasing statistical power for estimating genetic diversity, detecting fine-scale population structure, and inferring demographic history and gene flow. These expanded datasets also enable analyses that are difficult or impossible with microsatellite datasets, including tests of historical gene flow using approaches such as TreeMix and f-statistics, providing novel information for these complex systems. 
 
-Although reduced-representation approaches such as Restriction-site-Associated DNA sequencing (RADseq) similarly generate genome-wide SNPs, target-capture offers several practical advantages, including more consistent recovery of homologous loci across samples, improved reproducibility among sequencing runs and studies, and compatibility with lower-quality or degraded DNA [@bose2018], making it particularly well suited for conservation applications and non-model taxa. Together, these advantages demonstrate that target-capture datasets can serve as a powerful resource for population genomic analyses while also leveraging data originally generated for phylogenomic studies.
+Although reduced-representation approaches such as Restriction-site-Associated DNA sequencing (RADseq) generate genome-wide SNPs as well, target-capture offers several practical advantages. These included a more consistent recovery of homologous loci across samples, improved reproducibility among sequencing runs and studies, and compatibility with lower-quality DNA [@bose2018], making it particularly well suited for conservation applications and non-model taxa. Together, these advantages demonstrate that target-capture datasets can serve as a powerful resource for population genomic analyses while also leveraging data originally generated for phylogenomic studies.
 
 # Applicability to this Workflow 
 
-In this study, we demonstrate an accessible and reproducible workflow for generating and analyzing SNP datasets derived from target-capture sequencing data in a conservation genomics framework. Using *H. verticillatus* and its relatives as a case study, we evaluate genetic diversity and population structure across multiple previously known and newly discovered populations in Mississippi (hereafter referred to as *Helianthus* sp.), and compare our results with previous conservation genetic analyses based on microsatellites. By providing a transparent pipeline that can be applied to any species or target-capture probe set, this study illustrates how target-capture datasets can be leveraged to address conservation genomic questions and inform management decisions for rare and endangered species.
+In this study, we demonstrate a reproducible workflow for generating and analyzing SNP datasets derived from target-capture sequencing data in a conservation genomics framework. Using *H. verticillatus* and its relatives as a case study, we evaluate genetic diversity and population structure across multiple previously known and newly discovered populations, and compare our results with previous conservation genetic analyses based on microsatellites. By providing a transparent pipeline that can be applied to any species or target-capture probe set, this study illustrates how target-capture datasets can be leveraged to address conservation genomic questions and inform management decisions for rare and endangered species.
 
 
 # Sampling
 
-Leaf tissue was sampled from all known wild populations of *Helianthus verticillatus*: Alabama1, Alabama2, Georgia, McNairy (Tennessee), Pinson (Tennessee), w-Marshall (Mississippi), and Virginia. Seeds were obtained from the two available accessions of *H. verticillatus* maintained by the United States Department of Agriculture–Agricultural Research Service (USDA-ARS). Leaf tissue was sampled from all known populations of *Helianthus* sp. in Mississippi: Belzonia, Benton, Greenwood, Grenada, Marshall, and Tchula. Additionally, seeds were obtained from eight USDA-ARS accessions of *H. grosseserratus* populations, spanning its geographic range: Illinois, Iowa, Kansas, Mississippi, Nebraska, North Dakota, Oklahoma, and Wisconsin. Some downstream analyses require the inclusion of an outgroup, so a single individual of *Helianthus schweinitzii* Torr. & A.Gray was included.
+Leaf tissue was sampled from all known wild populations of *Helianthus verticillatus*: Alabama1, Alabama2, Georgia, McNairy (Tennessee), Pinson (Tennessee), w-Marshall (Mississippi), and Virginia. Seeds were obtained from the two accessions of *H. verticillatus* maintained by the United States Department of Agriculture–Agricultural Research Service (USDA-ARS). Leaf tissue was sampled from all known populations of *Helianthus* sp. in Mississippi: Belzonia, Benton, Greenwood, Grenada, Marshall, and Tchula. Additionally, seeds were obtained from eight USDA-ARS accessions of *H. grosseserratus* populations, spanning its geographic range: Illinois, Iowa, Kansas, Mississippi, Nebraska, North Dakota, Oklahoma, and Wisconsin. Some downstream analyses require the inclusion of an outgroup, so a single individual of *Helianthus schweinitzii* Torr. & A.Gray was included.
 
-The sampling map features the *H. verticillatus* population locations at their county centroids, since the species is federally endangered and exact locality information cannot be shared.
+The sampling map below features the *H. verticillatus* population locations at their county centroids, since the species is federally endangered and exact locality information cannot be shared.
 
 ```{r heli_map, echo = FALSE, out.width="100%", out.height="1000px"}
 Helianthuspalette <- colorFactor(
@@ -112,15 +112,15 @@ Helianthusmap1 <- leaflet(Helianthus_sp_Locations) %>%
 Helianthusmap1
 ```
 
-# Using this Guide
+# Using this Workflow
 
-Here are some tips for utilizing this guide.
+Here are some tips for utilizing this workflow:
 
 ---
 
 **Programming Languages**
 
-Throughout this guide, code chunks are labeled according to the programming language in which they should be executed. Commands enclosed in `bash` code blocks are intended to be run from a Linux command line or high-performance computing (HPC) environment, whereas code enclosed in `r` code blocks should be executed within R or RStudio. This guide was developed using R version 4.3.2. Distinguishing between these environments is intended to provide readers with clear guidance on where each step of the workflow should be performed.
+Throughout this guide, code chunks are labeled according to the programming language in which they should be executed. Code labeled with `bash` are intended to be run from a Linux command line or high-performance computing (HPC) environment, whereas code labeled with `r` should be executed within R or RStudio. This guide was developed using R version 4.3.2. Distinguishing between these environments is intended to provide readers with clear guidance on where each step of the workflow should be performed.
 
 ---
 
@@ -163,6 +163,8 @@ Project/
 │   └── SNPdataset_FinalFiltered.vcf.gz
 │
 ├── OutgroupDataset/
+│   ├── Outgroup_Sample1_R1.fastq.gz
+│   ├── Outgroup_Sample1_R2.fastq.gz
 │   └── OutgroupDataset_FinalFiltered.vcf.gz
 │
 ├── SpeciesSpecificDatasets/
@@ -212,7 +214,6 @@ Sample names should remain consistent throughout the workflow. Avoid renaming fi
 
 ---
 
-
 **Workflow Overview**
 
 The pipeline branches into analysis-specific datasets after SNP calling and filtering:
@@ -251,7 +252,7 @@ These version numbers should be reported alongside published results whenever po
 
 Before beginning downstream analyses, assess the quality of raw sequencing reads. FASTQ files commonly contain adapter contamination and low-quality bases, which can negatively affect read alignment and SNP calling.
 
-We use `FastQC` to generate per-sample quality reports and `MultiQC` to summarize results across all samples.
+Use `FastQC` to generate per-sample quality reports and `MultiQC` to summarize results across all samples.
 
 ---
 
@@ -298,14 +299,14 @@ Run `FastQC` on all FASTQ files:
 
 ```bash
 # bash
-fastqc /Project/RawReads/*.fastq.gz -o .
+fastqc /Project/RawReads/*.fastq.gz -o /Project/FastQCRaw/
 ```
 
 Aggregate results using `MultiQC`:
 
 ```bash
 # bash
-multiqc . -o .
+multiqc /Project/FastQCRaw/ -o /Project/FastQCRaw/
 ```
 
 Open the resulting `multiqc_report.html` file in a web browser to review results.
@@ -353,7 +354,7 @@ These should be the original raw FASTQ files, which are located in `/Project/Raw
 The following files are written to `/Project/Trimming/`:
 
 | File | Description |
-|:---:|:---:|
+|:---:|:-----:|
 | `*_R1.tp.fastq.gz` | Forward reads that remain paired after trimming |
 | `*_R2.tp.fastq.gz` | Reverse reads that remain paired after trimming |
 | `*_R1.tunp.fastq.gz` | Forward reads whose pair was removed during trimming |
@@ -368,7 +369,7 @@ Most downstream analyses use only the paired reads (`*.tp.fastq.gz`).
 The following trimming parameters are applied:
 
 | Parameter | Description |
-|:---:|:---:|
+|:---:|:-----:|
 | `ILLUMINACLIP:TruSeq3-PE.fa:2:30:10` | Removes Illumina TruSeq adapter sequences |
 | `LEADING:20` | Removes low-quality bases (`Q < 20`) from the beginning of reads |
 | `TRAILING:20` | Removes low-quality bases (`Q < 20`) from the end of reads |
@@ -416,7 +417,7 @@ done
 
 After trimming, reassess read quality to confirm that adapter contamination and low-quality bases have been successfully removed. This step ensures that only high-quality reads proceed to alignment and downstream analyses.
 
-We use `FastQC` on the trimmed reads to generate per-sample quality reports and `MultiQC` to summarize results across all samples.
+Use `FastQC` on the trimmed reads to generate per-sample quality reports and `MultiQC` to summarize results across all samples.
 
 ---
 
@@ -461,21 +462,21 @@ Run `FastQC` on all trimmed FASTQ files:
 
 ```bash
 # bash
-fastqc /Project/Trimming/*.tp.fastq.gz -o .
+fastqc /Project/Trimming/*.tp.fastq.gz -o /Project/FastQCTrimmed/
 ```
 
 Summarize the results with `MultiQC`:
 
 ```bash
 # bash
-multiqc . -o .
+multiqc /Project/FastQCTrimmed/ -o /Project/FastQCTrimmed/
 ```
 
 ---
 
 **Interpretation**
 
-Compare the pre- and post-trimming `MultiQC` reports:
+Compare the pre- and post-trimming `MultiQC` reports. In the post-trimming report, there should be:
 
 - Reduced or eliminated adapter contamination
 - Improved per-base sequence quality scores
@@ -488,7 +489,7 @@ Compare the pre- and post-trimming `MultiQC` reports:
 
 After trimming, align sequencing reads to a reference genome to determine their likely genomic origin. This step is required for downstream SNP discovery and genotyping.
 
-For this study, reads were aligned to the *Helianthus annuus* reference genome (Ha412HOv2.0), available from the Sunflower Genome Database (https://sunflowergenome.org/) [@badouin2017; @huang2023; @todesco2020]. A reference genome is not currently available for either *H. grosseserratus* or *H. verticillatus*, so *H. annuus* was used as the closest available high-quality reference assembly.
+For this study, reads were aligned to the *Helianthus annuus* reference genome (Ha412HOv2.0), available from the [Sunflower Genome Database](https://sunflowergenome.org/) [@badouin2017; @huang2023; @todesco2020]. A reference genome is not currently available for either *H. grosseserratus* or *H. verticillatus*, so *H. annuus* was used as the closest available high-quality reference assembly.
 
 Choose a reference genome appropriate for your study system. A great resource to find which genomes are currently available for your system is [PubPlant](https://www.plabipd.de/plant_genomes_pa.ep).
 
@@ -523,14 +524,15 @@ The following files are written to `/Project/ReferenceGenome/`:
 
 The following files are written to `/Project/Alignment/`:
 
-- Sorted alignment files (`*.bam`)
+- Sorted binary alignment files (`*.bam`)
+- Sorted alignment files (`*.sam`)
 - BAM index files (`*.bai`)
 
 ---
 
 ## Index the Reference Genome
 
-Before reads are aligned, index the reference genome, which creates files that allow the alignment software to efficiently search the genome.
+Before reads are aligned, index the reference genome. This creates files that allow the alignment software to efficiently search the genome.
 
 ---
 
@@ -573,7 +575,7 @@ Align the trimmed paired-end reads to the indexed reference genome. Only the pai
 The following alignment parameters are applied:
 
 | Parameter | Description |
-|:---:|:---:|
+|:---:|:-----:|
 | `--end-to-end` | Requires the entire read to align to the reference |
 | `--sensitive` | Preset that increases alignment sensitivity |
 | `-p 24` | Uses 24 CPU threads to speed up alignment |
@@ -638,7 +640,7 @@ This process allows reads to be placed at specific genomic positions, which is e
 
 # Call and Filter SNPs
 
-Single nucleotide polymorphisms (SNPs) are one of the most widely used genetic markers in population genomics. After aligning reads to the reference genome, identify variant sites across all samples using `BCFtools`.
+After aligning reads to the reference genome, identify variant sites across all samples and then filter this dataset to generate filtered, high-quality SNPs ready for downstream analysis. 
 
 ---
 
@@ -646,11 +648,11 @@ Single nucleotide polymorphisms (SNPs) are one of the most widely used genetic m
 
 This step uses the following tools:
 
-* [`Bowtie2`](https://bowtie-bio.sourceforge.net/bowtie2/manual.shtml) [@langmead2012] – indexes the reference genome and aligns paired-end reads to the reference genome
-* [`SAMtools`](https://www.htslib.org/doc/samtools.html) [@li2009; @danecek2021] – converts, sorts, indexes, and processes SAM/BAM alignment files
+* [`Bowtie2`](https://bowtie-bio.sourceforge.net/bowtie2/manual.shtml) [@langmead2012] – identifies variants across the alignment and filters the resulting file
 * [`PLINK`](https://www.cog-genomics.org/plink/1.9/) [@chang2015] – converts genotype formats, filters SNPs, performs LD pruning, and calculates genetic distances
 * [`R`](https://www.r-project.org/) [@r2021] – processes PLINK LD output to calculate SNP distances, bin pairwise comparisons, and summarize mean r² values for LD decay visualization
-* [`dplyr`](https://dplyr.tidyverse.org/) [@wickham2023] – assists with data wrangling and distance-bin assignment
+* [`dplyr`](https://dplyr.tidyverse.org/) [@wickham2023] – R package that assists with data wrangling and distance-bin assignment
+* [`ggplot2`](https://ggplot2.tidyverse.org/) [@wickham2016] – R package for creating graphics 
 
 ---
 
@@ -705,9 +707,9 @@ bcftools index SNPdataset_raw.vcf.gz
 The following parameters are applied:
 
 | Parameter | Description |
-|:---:|:---:|
+|:---:|:-------:|
 | `-f` | Specifies the reference genome in FASTA format |
-| `-Ou` | Outputs an uncompressed BCF stream suitable for piping into the `call` command |
+| `-Ou` | Outputs an uncompressed BCF stream suitable for the `call` command |
 | `-v` | Restricts output to variant sites only |
 | `-m` | Uses the multiallelic variant caller |
 | `-Oz` | Outputs a bgzip-compressed VCF |
@@ -763,7 +765,7 @@ To retain high-quality and informative variants, the following filters are appli
 
 1. Read depth (`DP >= 4`) — ensures sufficient sequencing support
 2. Quality (`QUAL >= 20`) — removes low-confidence calls
-3. Biallelic SNPs — removes invariant sites and indels
+3. Retain only biallelic SNPs — removes invariant sites and indels
 4. Missing data (`≤ 0.25`) — removes poorly genotyped loci
 5. Minor allele frequency (`MAF > 0.01`) — removes rare variants
 6. Linkage disequilibrium (`r² < 0.2`) — removes non-independent loci
@@ -783,7 +785,7 @@ Filter by depth and quality:
 bcftools filter -i 'DP>=4 && QUAL>=20' -O z -o SNPdataset_02_DP4_QUAL20.vcf.gz SNPdataset_01_fix_missingGT.vcf
 ```
 
-Keep biallelic SNPs only:
+Retain only biallelic SNPs:
 
 ```bash
 # bash
@@ -854,14 +856,14 @@ mkdir /Project/Alignment/LDInvestigation/POPULATION1
 cd POPULATION1
 ```
 
-Extract samples belonging to a single population:
+Extract all samples belonging to a single population from the VCF:
 
 ```bash
 # bash
 bcftools view -s POPULATION1_SAMPLE1,POPULATION1_SAMPLE2,POPULATION1_SAMPLE3 -o POPULATION1.vcf /Project/Alignment/SNPdataset_05_MAF01.vcf.gz
 ```
 
-Convert the VCF to PLINK format:
+Convert the population-specfic VCF to PLINK format:
 
 ```bash
 # bash
@@ -879,18 +881,21 @@ This generates a `plink.ld` file containing pairwise LD estimates (r²) between 
 
 ```r
 # r
+install.packages("dplyr")
+install.packages("ggplot2")
+
 library(dplyr)
 library(ggplot2)
 ```
 
-Read in the `plink.ld` table:
+Read the `plink.ld` table into `R`:
 
 ```r
 # r
 LD <- read.table("plink.ld", header = TRUE)
 ```
 
-Create custom breaks:
+Create custom distance bin breaks for the r² plot:
 
 ```r
 # r
@@ -1021,7 +1026,7 @@ bcftools view -T snps_to_keep.txt -o SNPdataset_FinalFiltered.vcf.gz -O z SNPdat
 
 The intermediate file naming system (e.g., `01_fix_missingGT`, `03_biallelic_snps`) allows users to track how each filtering step affects the dataset.
 
-To summarize SNP statistics at any stage:
+To summarize the SNP statistics for any stage in the filtering process:
 
 ```bash
 # bash
@@ -1050,7 +1055,7 @@ Together, these filtering steps ensure that the dataset is suitable for downstre
 
 Some downstream population genomic analyses (e.g., `TreeMix`, ABBA-BABA tests) require the inclusion of an outgroup to infer the direction of allele frequency changes and root population relationships. An outgroup is a sample or population that is phylogenetically outside the group of interest but still closely related enough to allow meaningful comparison.
 
-Process the outgroup dataset using the same pipeline described above, with modifications to the SNP filtering steps.
+The process for generating the outgroup dataset is similar to the workflow described above, with modifications to the SNP filtering steps.
 
 ---
 
@@ -1061,8 +1066,9 @@ This step uses the following tools:
 * [`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) [@andrews2010] – evaluates raw and trimmed read quality
 * [`MultiQC`](https://docs.seqera.io/multiqc/) [@ewels2016] – summarizes quality-control reports across samples
 * [`Trimmomatic`](http://www.usadellab.org/cms/?page=trimmomatic) [@bolger2014] – removes adapters and low-quality bases from raw sequencing reads
-* [`Bowtie2`](https://bowtie-bio.sourceforge.net/bowtie2/manual.shtml) [@langmead2012] – indexes the reference genome and aligns paired-end reads to the reference genome
+* [`Bowtie2`](https://bowtie-bio.sourceforge.net/bowtie2/manual.shtml) [@langmead2012] – indexes the reference genome, aligns paired-end reads to the reference genome, identifies variants across the alignment, and filters the resulting file
 * [`SAMtools`](https://www.htslib.org/doc/samtools.html) [@li2009; @danecek2021] – converts, sorts, indexes, and processes SAM/BAM alignment files
+* [`PLINK`](https://www.cog-genomics.org/plink/1.9/) [@chang2015] – performs LD pruning
 
 ---
 
@@ -1070,7 +1076,7 @@ This step uses the following tools:
 
 Unlike datasets prepared for analyses of genetic diversity, SNP filtering for outgroup-based analyses should be more conservative:
 
-|                 **Pipeline Step**                | **Apply** | **Notes**                                                                                                                                           |
+| **Pipeline Step** | **Apply** | **Notes** |
 | :----------------------------------------------: | :-------: | :--------------------------------------------------------------------------------------------------------------------------------------------------: |
 |           Alignment to reference genome          |    Yes    | Must be performed consistently for all ingroup and outgroup samples.                                                                                |
 | SNP calling (`bcftools mpileup`/`bcftools call`) |    Yes    | Include the outgroup during variant calling so SNPs are called jointly across all samples.                                                          |
@@ -1080,7 +1086,7 @@ Unlike datasets prepared for analyses of genetic diversity, SNP filtering for ou
 |      Minor allele frequency (MAF) filtering      |   **No**  | Rare alleles may be informative for resolving relationships among ingroup and outgroup samples and should not be removed from the outgroup dataset. |
 |       Linkage disequilibrium (LD) filtering      |  Yes  | Apply LD pruning to reduce non-independence among tightly linked SNPs while retaining genome-wide ancestry and allele-frequency information.        |
 
-For the outgroup dataset, LD filtering was applied, but MAF filtering was not applied, allowing rare variants to be retained while reducing redundancy among highly correlated SNPs.
+For the outgroup dataset, LD filtering was applied but MAF filtering was not, allowing rare variants to be retained while reducing redundancy among highly correlated SNPs.
 
 ---
 
@@ -1088,8 +1094,8 @@ For the outgroup dataset, LD filtering was applied, but MAF filtering was not ap
 
 For each outgroup sample, two compressed FASTQ files are required:
 
-- `Outgroup_R1.fastq.gz` — forward reads
-- `Outgroup_R2.fastq.gz` — reverse reads
+- `Outgroup_Sample1_R1.fastq.gz` — forward reads
+- `Outgroup_Sample1_R2.fastq.gz` — reverse reads
 
 Located in `/Project/Alignment/`:
 
@@ -1103,28 +1109,26 @@ Located in `/Project/ReferenceGenome/`:
 
 **Outputs**
 
-The following file is written to `/Project/OutgroupDataset/`:
+The following filess are written to `/Project/OutgroupDataset/`:
 
-- `Outgroup_SNPdataset_FinalFiltered.vcf.gz`
+- `Outgroup_SNPdataset_raw.vcf.gz` — raw SNP calls
+- `Outgroup_SNPdataset_FinalFiltered.vcf.gz` — filtered SNP calls
 
----
-
-## Recommended Workflow
-
-To generate a dataset suitable for outgroup-based analyses, follow the workflow outlined below. It is similar to the workflow described previously, with modifications to the SNP filtering step.
 
 ---
+
+## Workflow
 
 **Code**
 
-Create a folder for the outgroup dataset (`/Project/OutgroupDataset/`), move into it, and copy the raw outgroup sequencing reads (`.fastq.gz`) into the folder:
+Create a folder for the outgroup dataset (`/Project/OutgroupDataset/`) and move into it. Copy the raw outgroup sequencing reads (`.fastq.gz`) into the folder:
 
 ```bash
 # bash
 mkdir /Project/OutgroupDataset/
 cd OutgroupDataset
 
-cp /path/to/Outgroup.fastq.gz /Project/OutgroupDataset/
+cp /path/to/Outgroup*.fastq.gz /Project/OutgroupDataset/
 ```
 
 ---
@@ -1135,14 +1139,14 @@ Run `FastQC` on the outgroup FASTQ files:
 
 ```bash
 # bash
-fastqc /Project/OutgroupDataset/*.fastq.gz -o .
+fastqc /Project/OutgroupDataset/*.fastq.gz -o /Project/OutgroupDataset/
 ```
 
 Aggregate results using `MultiQC`:
 
 ```bash
 # bash
-multiqc FastQCRaw -o .
+multiqc /Project/OutgroupDataset/ -o /Project/OutgroupDataset/
 ```
 
 Open the resulting `multiqc_report.html` file in a web browser to review the results.
@@ -1151,14 +1155,22 @@ This loop trims all paired-end samples present in the `/OutgroupDataset/` folder
 
 ```bash
 # bash
+
 for fileR1 in /Project/OutgroupDataset/*_R1.fastq.gz
 do
 
   fileR2=${fileR1/_R1.fastq.gz/_R2.fastq.gz}
   base=$(basename ${fileR1} _R1.fastq.gz)
 
-  java -jar /Project/Tools/Trimmomatic/Trimmomatic.jar PE -threads 4 ${fileR1} ${fileR2} ${base}_R1.tp.fastq.gz ${base}_R1.tunp.fastq.gz ${base}_R2.tp.fastq.gz ${base}_R2.tunp.fastq.gz \
-  ILLUMINACLIP:/Project/Tools/Trimmomatic/adapters/TruSeq3-PE.fa:2:30:10 LEADING:20 TRAILING:20 SLIDINGWINDOW:5:20 MINLEN:36
+  java -jar /Project/Tools/Trimmomatic/Trimmomatic.jar PE -threads 4 \
+    ${fileR1} ${fileR2} \
+    ${base}_R1.tp.fastq.gz ${base}_R1.tunp.fastq.gz \
+    ${base}_R2.tp.fastq.gz ${base}_R2.tunp.fastq.gz \
+    ILLUMINACLIP:/Project/Tools/Trimmomatic/adapters/TruSeq3-PE.fa:2:30:10 \
+    LEADING:20 \
+    TRAILING:20 \
+    SLIDINGWINDOW:5:20 \
+    MINLEN:36
 
 done
 ```
@@ -1200,7 +1212,7 @@ Copy the BAM files from `/Project/Alignment/` into the `/OutgroupDataset/` folde
 cp /Project/Alignment/*.bam /Project/OutgroupDataset/
 ```
 
-Call SNPs to create the raw dataset:
+Identify variants using the `BCFtools` functions `mpileup` and `call` by comparing aligned reads in all BAM files (including the outgroup) to the reference genome.
 
 ```bash
 # bash
@@ -1249,7 +1261,7 @@ Verify that no incorrect missing genotypes remain:
 grep '0/0:0,0,0\|0/1:0,0,0\|1/1:0,0,0' Outgroup_SNPdataset_01_fix_missingGT.vcf
 ```
 
-If this command returns any output, an error remains in the file.
+If this command returns any output, an error remains in the file and will need to be investigated further.
 
 ---
 
@@ -1259,7 +1271,7 @@ To retain high-quality and informative variants, apply the following filters:
 
 1. Read depth (`DP >= 4`) — ensures sufficient sequencing support
 2. Quality (`QUAL >= 20`) — removes low-confidence calls
-3. Biallelic SNPs — removes invariant sites and indels
+3. Retain only biallelic SNPs — removes invariant sites and indels
 4. Missing data (`≤ 0.25`) — removes poorly genotyped loci
 5. Linkage disequilibrium (`r² < 0.2`) — removes non-independent loci
 
@@ -1272,7 +1284,7 @@ Filter by depth and quality:
 bcftools filter -i 'DP>=4 && QUAL>=20' -O z -o Outgroup_SNPdataset_02_DP4_QUAL20.vcf.gz Outgroup_SNPdataset_01_fix_missingGT.vcf
 ```
 
-Keep biallelic SNPs only:
+Retain only biallelic SNPs:
 
 ```bash
 # bash
@@ -1348,17 +1360,14 @@ To ensure that allele frequencies and diversity statistics are estimated only fr
 
 This step uses the following tools:
 
-* [`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) [@andrews2010] – evaluates raw and trimmed read quality
-* [`MultiQC`](https://docs.seqera.io/multiqc/) [@ewels2016] – summarizes quality-control reports across samples
-* [`Trimmomatic`](http://www.usadellab.org/cms/?page=trimmomatic) [@bolger2014] – removes adapters and low-quality bases from raw sequencing reads
-* [`Bowtie2`](https://bowtie-bio.sourceforge.net/bowtie2/manual.shtml) [@langmead2012] – indexes the reference genome and aligns paired-end reads to the reference genome
-* [`SAMtools`](https://www.htslib.org/doc/samtools.html) [@li2009; @danecek2021] – converts, sorts, indexes, and processes `SAM`/`BAM` alignment files
+* [`Bowtie2`](https://bowtie-bio.sourceforge.net/bowtie2/manual.shtml) [@langmead2012] – indexes the reference genome, aligns paired-end reads to the reference genome, identifies variants across the alignment, and filters the resulting file
+* [`SAMtools`](https://www.htslib.org/doc/samtools.html) [@li2009; @danecek2021] – converts, sorts, indexes, and processes SAM/BAM alignment files
 
 ---
 
 **Filtering Strategy for Species-Separated Analyses**
 
-|                 **Pipeline Step**                | **Apply** | **Notes**                                                                                                                                      |
+|                 **Pipeline Step**                | **Apply** | **Notes** |
 | :----------------------------------------------: | :-------: | :---------------------------------------------------------------------------------------------------------------------------------------------: |
 |           Alignment to reference genome          |    Yes    | Must be performed consistently for all individuals across datasets.                                                                            |
 | SNP calling (`bcftools mpileup`/`bcftools call`) |    Yes    | Include all individuals within the focal species during variant calling.                                                                       |
@@ -1398,11 +1407,7 @@ These VCF files are subsequently used in the Genetic Diversity Statistics sectio
 
 ---
 
-## Recommended Workflow
-
-To generate species-separated datasets, follow the workflow outlined below. It is similar to the workflow described previously, with modifications to the SNP filtering step.
-
----
+## Workflow
 
 **Code**
 
@@ -1417,23 +1422,11 @@ cd Alignment
 
 **Call SNPs by Species**
 
-Create a text file containing the BAM files for each species.
-
-Example:
-
-```text
-Species1_bams.txt
-
-Species1_Sample1.bam
-Species1_Sample2.bam
-Species1_Sample3.bam
-```
-
-Call SNPs using `bcftools mpileup` and `bcftools call` with only the BAM files belonging to a single species.
+Identify variants using the `BCFtools` functions `mpileup` and `call` by comparing aligned reads in the BAM files belonging to a single species to the reference genome.
 
 ```bash
 # bash
-bcftools mpileup -Ou -f /Project/ReferenceGenome/ReferenceGenome.fasta -b Species1_bams.txt | bcftools call -mv -Oz -o Species1_SNPDataset_raw.vcf.gz
+bcftools mpileup -Ou -f /Project/ReferenceGenome/ReferenceGenome.fasta -b POPULATION1_SAMPLE1.bam,POPULATION1_SAMPLE2.bam,POPULATION1_SAMPLE3.bam | bcftools call -mv -Oz -o Species1_SNPDataset_raw.vcf.gz
 ```
 
 Index the VCF:
@@ -1476,7 +1469,7 @@ Verify that no incorrect missing genotypes remain:
 grep '0/0:0,0,0\|0/1:0,0,0\|1/1:0,0,0' Species1_SNPDataset_01_fix_missingGT.vcf
 ```
 
-If this command returns any output, an error remains in the file.
+If this command returns any output, an error remains in the file and will need to be investigated further.
 
 ---
 
@@ -1486,7 +1479,7 @@ To retain high-quality and informative variants, apply the following filters:
 
 1. Read depth (`DP >= 4`) — ensures sufficient sequencing support
 2. Quality (`QUAL >= 20`) — removes low-confidence calls
-3. Biallelic SNPs — removes invariant sites and indels
+3. Retain only biallelic SNPs — removes invariant sites and indels
 4. Missing data (`≤ 0.25`) — removes poorly genotyped loci
 
 Do not filter based on minor allele frequency and do not prune SNPs based on linkage disequilibrium.
@@ -1498,7 +1491,7 @@ Filter by depth and quality:
 bcftools filter -i 'DP>=4 && QUAL>=20' -O z -o Species1_SNPdataset_02_DP4_QUAL20.vcf.gz Species1_SNPdataset_01_fix_missingGT.vcf
 ```
 
-Keep biallelic SNPs only:
+Retain only biallelic SNPs:
 
 ```bash
 # bash
@@ -1535,9 +1528,7 @@ rm Species1_SNPdataset_04_missingdata_body.vcf
 
 This produces a dataset that preserves the full spectrum of genetic variation needed for genetic diversity analyses. The output is the filtered species-specific dataset, `Species1_SNPdataset_FinalFiltered.vcf.gz`.
 
----
-
-Repeat this workflow for each species to create the species-separated SNP datasets.
+Repeat this workflow for each species to create all the species-separated SNP datasets.
 
 ---
 
@@ -1562,7 +1553,7 @@ Several analyses require metadata files linking sample IDs to species or populat
 
 **Sample and Species Assignment Metadata File**
 
-This file contains a list of all samples and their associated species assignments.
+This file contains a list of all samples and their associated species assignments. Do not include the outgroup.
 
 Extract sample names from the VCF:
 
@@ -1589,7 +1580,7 @@ knitr::include_graphics("./figures/sample_names_by_species.png")
 
 **Sample and Population Assignment Metadata File**
 
-This file contains a list of all samples and their associated population assignments.
+This file contains a list of all samples and their associated population assignments. Do not add the outgroup.
 
 Extract sample names from the VCF:
 
@@ -1642,7 +1633,7 @@ To characterize patterns of genetic diversity and population structure within th
 
 ## Principal Components Analysis
 
-Principal components analysis (PCA) is a dimensionality reduction method used to visualize genetic relationships among samples. By summarizing genome-wide variation into a small number of axes (principal components), PCA allows identification of clustering patterns that reflect population structure, species boundaries, or admixture.
+Principal components analysis (PCA) is a dimensionality reduction method used to visualize genetic relationships among samples. By summarizing genome-wide variation into a small number principal components, PCA assists with the identification of clustering patterns that reflect population structure and species boundaries.
 
 ---
 
@@ -1650,8 +1641,9 @@ Principal components analysis (PCA) is a dimensionality reduction method used to
 
 This analysis uses the following tools:
 
-* [`SNPRelate`](https://bioconductor.org/packages/SNPRelate/) [@zheng2012] – converts VCF files to GDS format and performs principal component analysis on genome-wide SNP datasets
 * [`R`](https://www.r-project.org/) [@r2021] – manages data, executes PCA analyses, and visualizes principal component results
+* [`SNPRelate`](https://bioconductor.org/packages/SNPRelate/) [@zheng2012] – R package that converts VCF files to GDS format and performs principal component analysis on genome-wide SNP datasets
+* [`dplyr`](https://dplyr.tidyverse.org/) [@wickham2023] – R package that assists with data wrangling and distance-bin assignment
 
 ---
 
@@ -1804,7 +1796,7 @@ This analysis uses the following tools:
 * [`ADMIXTURE`](https://dalexander.github.io/admixture/) [@alexander2009] – estimates individual ancestry proportions and infers population structure using a maximum-likelihood clustering approach
 * [`PLINK`](https://www.cog-genomics.org/plink/1.9/) [@chang2015] – converts VCF files to `PLINK` binary format (`.bed`, `.bim`, `.fam`) required for ADMIXTURE analyses
 * [`R`](https://www.r-project.org/) [@r2021] – visualizes ADMIXTURE results and generates ancestry proportion barplots across values of K
-* [`plotADMIXTURE.r`](https://github.com/speciationgenomics/) – formats and plots ADMIXTURE ancestry estimates for publication-quality visualization
+* [`plotADMIXTURE.r`](https://github.com/speciationgenomics/) – R script that formats and plots ADMIXTURE ancestry estimates for publication-quality visualization
 
 The [`ADMIXTURE` manual](https://dalexander.github.io/admixture/admixture-manual.pdf) provides an in-depth explanation of all available options. The script [`plotADMIXTURE.r`](https://github.com/speciationgenomics/) by Joana Meier must be downloaded for this step. This script provides a simple way to generate publication-quality visualizations of ADMIXTURE results.
 
@@ -1913,9 +1905,9 @@ Evaluate multiple values of K rather than relying on a single result. Interpret 
 
 ## Neighbor-Joining Tree
 
-Neighbor-joining (NJ) trees provide a graphical representation of genetic relationships among samples based on pairwise genetic distances [@saitou1987]. Unlike PCA and ADMIXTURE, which summarize population structure in multivariate space, neighbor-joining trees represent relationships as a branching network, allowing visualization of genetic similarity among individuals and populations.
+Neighbor-joining (NJ) trees provide a graphical representation of genetic relationships among samples based on pairwise genetic distances [@saitou1987]. Unlike PCA and ADMIXTURE, neighbor-joining trees display genetic relationships as a branching network, making it easier to visualize which individuals and populations are most genetically similar.
 
-In this workflow, the NJ tree is constructed using the `neighbor` program from the `PHYLIP` package [@felsenstein1989].
+In this workflow, the NJ tree is constructed using the `neighbor` function from the `PHYLIP` program [@felsenstein1989].
 
 ---
 
@@ -1945,7 +1937,7 @@ The following files are written to `/Project/NJTree/`:
 
 - Pairwise genetic distance matrix
 - Neighbor-joining tree (`outtree`)
-- Tree visualization
+- Tree visualization in `FigTree`
 
 ---
 
@@ -1968,7 +1960,7 @@ plink --vcf /Project/Alignment/SNPdataset_FinalFiltered.vcf.gz --distance --out 
 
 Convert the distance matrix to PHYLIP format, as `PHYLIP` requires a specific input format that differs from the default `PLINK` output.
 
-Open the `.dist` file generated by `PLINK` and convert it to PHYLIP format following the [guidelines](https://condor.depaul.edu/waguirre/phylip_making_trees.pdf) created by Windsor Aguirre.
+Open the `.dist` file generated by `PLINK` and convert it to PHYLIP format following these [guidelines](https://condor.depaul.edu/waguirre/phylip_making_trees.pdf) created by Windsor Aguirre.
 
 Save the formatted distance matrix as `infile` with no file extension.
 
@@ -1979,9 +1971,7 @@ Launch the `neighbor` program. When prompted, modify the settings to `Y` for the
 - `outfile` — summary of the analysis
 - `outtree` — neighbor-joining tree in Newick format
 
-The `outtree` file is used for visualization.
-
-Visualize the tree in `FigTree`. Open `FigTree` and load the `outtree` file.
+The `outtree` file is used for visualization. Open `FigTree` and load the `outtree` file.
 
 By default, `FigTree` may display the tree as rooted. To produce an unrooted neighbor-joining tree:
 
@@ -2007,13 +1997,13 @@ knitr::include_graphics("./figures/NJTree for RMarkdown.png")
 
 **Interpretation**
 
-Samples that cluster together on the tree are genetically more similar than samples separated by longer branch lengths.
+Samples that cluster together on the tree are more genetically similar than samples separated by longer branch lengths.
 
 Patterns commonly observed include:
 
 - Individuals from the same population clustering together
 - Closely related populations forming larger clades
-- Admixed or intermediate samples occupying positions between major clusters
+- Admixed individuals occupying positions between major clusters
 
 Because neighbor-joining trees are based on pairwise genetic distances, they should be interpreted alongside PCA, ADMIXTURE, and other population genetic analyses rather than as a definitive evolutionary history.
 
@@ -2033,9 +2023,9 @@ This workflow calculates pairwise F<sub>ST</sub>, observed heterozygosity (H<sub
 
 This analysis uses the following tools:
 
-* [`vcfR`](https://cran.r-project.org/package=vcfR) [@knaus2017] – imports VCF files into `R` and converts variant data into formats compatible with population genetic analyses
-* [`dartR.popgen`](https://cran.r-project.org/package=dartR.popgen) [@gruber2018; @mijangos2022] – calculates population genetic summary statistics, including observed heterozygosity (H<sub>O</sub>), expected heterozygosity (uH<sub>E</sub>), inbreeding coefficients (F<sub>IS</sub>), and private alleles
 * [`R`](https://www.r-project.org/) [@r2021] – manages, analyzes, and summarizes population genetic data
+* [`vcfR`](https://cran.r-project.org/package=vcfR) [@knaus2017] – R package that imports VCF files into `R` and converts variant data into formats compatible with population genetic analyses
+* [`dartR.popgen`](https://cran.r-project.org/package=dartR.popgen) [@gruber2018; @mijangos2022] – R package calculates population genetic summary statistics
 
 The `dartR.popgen` package is part of the [dartRverse](http://github.com/green-striped-gecko/dartRverse), a collection of `R` packages designed for population genomic and conservation genetic analyses.
 
@@ -2056,8 +2046,8 @@ Each species should be analyzed independently using its corresponding species-sp
 
 For each species, the following files are written to `/Project/GeneticDiversity/`:
 
-- `Species1_FST.csv` — pairwise F<sub>ST</sub> estimates among populations
-- `Species1_Heterozygosity.csv` — observed heterozygosity, expected heterozygosity, and inbreeding statistics
+- `Species1_FST.csv` — example pairwise F<sub>ST</sub> estimates among populations
+- `Species1_Heterozygosity.csv` — example observed heterozygosity, expected heterozygosity, and inbreeding statistics
 
 ---
 
@@ -2086,11 +2076,14 @@ Open an `R` environment and load the necessary packages:
 
 ```r
 # r
+install.packges("vcfR")
+install.packges("dartR.popgen")
+
 library(vcfR)
 library(dartR.popgen)
 ```
 
-Read the species-specific VCF and convert it to a `genlight` object:
+Read the species-specific VCF into `R` and convert it to a `genlight` object:
 
 ```r
 # r
@@ -2098,7 +2091,7 @@ vcf <- read.vcfR("/Project/SpeciesSpecificDatasets/H_verticillatus_FinalFiltered
 genlight <- vcfR2genlight(vcf)
 ```
 
-Read the population metadata file:
+Read the population metadata file into `R`:
 
 ```r
 # r
@@ -2167,9 +2160,9 @@ These results should be interpreted alongside PCA, ADMIXTURE, and neighbor-joini
 
 # Investigate Gene Flow
 
-Previous analyses (PCA, ADMIXTURE, neighbor-joining trees, and genetic diversity statistics) characterize patterns of genetic structure within the dataset. However, these approaches do not explicitly model historical gene flow among populations.
+Previous analyses (PCA, ADMIXTURE, neighbor-joining trees, and genetic diversity statistics) characterize patterns of genetic structure within the dataset. However, these approaches do not explicitly evaluate historical gene flow among populations.
 
-To investigate potential hybridization and introgression, several complementary methods can be employed that test for gene flow using different statistical frameworks. Together, these analyses can identify historical migration events, quantify admixture, and evaluate competing hypotheses regarding population relationships.
+To investigate potential hybridization and introgression, several methods can be employed that test for gene flow using different statistical frameworks. Together, these analyses can identify historical migration events, quantify admixture, and evaluate hypotheses regarding population relationships.
 
 ## TreeMix
 
@@ -2177,7 +2170,7 @@ To investigate potential hybridization and introgression, several complementary 
 
 This approach is particularly useful for identifying historical gene flow among populations and visualizing complex evolutionary histories that cannot be adequately represented by a strictly bifurcating tree.
 
-In this workflow, `TreeMix` is applied to the outgroup-inclusive dataset generated earlier in the pipeline.
+In this workflow, `TreeMix` is applied to the Outgroup dataset.
 
 ---
 
@@ -2187,10 +2180,11 @@ This analysis uses the following tools:
 
 * [`TreeMix`](https://bitbucket.org/nygcresearch/treemix/wiki/Home) [@pickrell2012] – infers population relationships and models historical gene flow by fitting migration edges to a population tree
 * [`OptM`](https://cran.r-project.org/package=OptM) [@fitak2021] – evaluates `TreeMix` models and identifies the optimal number of migration edges using an Evanno-like ΔM approach
-* [`dartR.popgen`](https://cran.r-project.org/package=dartR.popgen) [@gruber2018; @mijangos2022] – converts population genomic datasets into `TreeMix`-compatible input formats
-* [`RColorBrewer`](https://cran.r-project.org/package=RColorBrewer) [@Neuwirth2022] – provides color palettes for visualizing `TreeMix` results
-* [`R.utils`](https://cran.r-project.org/package=R.utils) [@bengtsson2023] – provides utility functions required for processing and plotting `TreeMix` outputs
 * [`R`](https://www.r-project.org/) [@r2021] – executes `TreeMix` helper functions and visualizes migration models
+* [`vcfR`](https://cran.r-project.org/package=vcfR) [@knaus2017] – R package that imports VCF files into `R` and converts variant data into formats compatible with population genetic analyses
+* [`dartR.popgen`](https://cran.r-project.org/package=dartR.popgen) [@gruber2018; @mijangos2022] – R package that converts population genomic datasets into `TreeMix`-compatible input formats
+* [`RColorBrewer`](https://cran.r-project.org/package=RColorBrewer) [@Neuwirth2022] – R package that provides color palettes for visualizing `TreeMix` results
+* [`R.utils`](https://cran.r-project.org/package=R.utils) [@bengtsson2023] – R package that provides utility functions required for processing and plotting `TreeMix` outputs
 
 ---
 
@@ -2228,9 +2222,7 @@ mkdir /Project/TreeMix/
 cd TreeMix
 ```
 
-Convert the VCF to TreeMix format.
-
-Open an `R` environment and load the required packages:
+Convert the VCF to TreeMix format using R. Load in the required packages:
 
 ```r
 # r
@@ -2246,7 +2238,7 @@ vcf <- read.vcfR("OutgroupDataset_FinalFiltered.vcf.gz")
 genlight <- vcfR2genlight(vcf)
 ```
 
-Read the population metadata file used previously for ADMIXTURE and genetic diversity analyses:
+Read the population metadata file into `R`:
 
 ```r
 # r
@@ -2277,7 +2269,7 @@ gl2treemix(genlight, outpath = getwd())
 
 Run `TreeMix`.
 
-`TreeMix` will be run across a range of migration edge values (*m* = 0–10). Multiple replicates are performed for each value of *m* to assess model stability.
+`TreeMix` will run across a range of migration edge values (*m* = 0–10). Multiple replicates are performed for each value of *m* to assess model stability.
 
 ```bash
 # bash
@@ -2292,9 +2284,7 @@ done
 
 ---
 
-Determine the optimal number of migration edges with `OptM`:
-
-Open an `R` environment and load the required packages:
+Determine the optimal number of migration edges with `OptM`. Open an `R` environment and load the required packages:
 
 ```r
 # r
@@ -2452,7 +2442,7 @@ f3(Target; Source1, Source2)
 
 A significantly negative *f3*-statistic indicates that the target population likely derives ancestry from populations related to the two source populations. Positive values generally indicate no evidence of admixture under the tested configuration.
 
-Because *f3*-statistics do not require information about ancestral and derived alleles, an outgroup is not required for this analysis.
+Because *f3*-statistics do not require information about ancestral and derived alleles, an outgroup is not required for this analysis. The Ingroup dataset is used for this analysis.
 
 ```{r, echo=FALSE, fig.cap="Phylogenetic representation of admixture *f3*-statistics. The numbers indicate the taxa (or populations) tested.", fig.align='center', out.width='60%'}
 knitr::include_graphics("./figures/F3-Statistics Tree.jpeg")
@@ -2465,9 +2455,9 @@ knitr::include_graphics("./figures/F3-Statistics Tree.jpeg")
 This analysis uses the following tools:
 
 * [`ADMIXTOOLS`](https://github.com/DReichLab/AdmixTools) [@patterson2012] – calculates *f3*-statistics to test for evidence of admixture among populations using allele frequency correlations
+* [`R`](https://www.r-project.org/) [@r2021] – prepares input files and processes *f3*-statistic results
 * [`vcfR`](https://cran.r-project.org/package=vcfR) [@knaus2017] – imports VCF files into `R` and converts variant data into formats compatible with downstream analyses
 * [`dartR.popgen`](https://cran.r-project.org/package=dartR.popgen) [@gruber2018; @mijangos2022] – converts population genomic datasets into EIGENSTRAT format required for `ADMIXTOOLS` analyses
-* [`R`](https://www.r-project.org/) [@r2021] – prepares input files and processes *f3*-statistic results
 
 ---
 
@@ -2500,9 +2490,7 @@ mkdir /Project/F3Statistics/
 cd F3Statistics
 ```
 
-Convert the VCF to EIGENSTRAT format.
-
-Open an `R` environment and load the required packages:
+Convert the VCF to EIGENSTRAT format. Open an `R` environment and load the required packages:
 
 ```r
 # r
@@ -2518,7 +2506,7 @@ vcf <- read.vcfR("SNPdataset_FinalFiltered.vcf.gz")
 genlight <- vcfR2genlight(vcf)
 ```
 
-Import the population file:
+Read the population metadata file into `R`:
 
 ```r
 # r
