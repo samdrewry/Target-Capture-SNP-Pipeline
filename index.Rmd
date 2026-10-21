@@ -336,6 +336,8 @@ This step uses the following tool:
 
 * [`Trimmomatic`](http://www.usadellab.org/cms/?page=trimmomatic) [@bolger2014] – removes adapters and low-quality bases from raw sequencing reads
 
+Note: Trimmomatic with default settings does not trip long poly-G tails at the 3' ends of reads as often produced by some Illumina sequencers (e.g., NovaSeq platform), users may need to alter trimming schemes depnding on their particular sequencing platform used, and may find this post helpful: [https://www.biostars.org/p/9617062/](https://www.biostars.org/p/9617062/).
+
 ---
 
 **Inputs**
