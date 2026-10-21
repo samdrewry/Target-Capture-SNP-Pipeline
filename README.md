@@ -17,7 +17,7 @@ This workflow was developed for target-capture population genomic data generated
 
 The rendered tutorial can be viewed online without downloading the repository or opening RStudio:
 
-[View the Target Capture SNP Pipeline website](https://samdrewry.github.io/Target-Capture-SNP-Pipeline/)
+[View the Target Capture SNP Pipeline website](https://samdrewry.github.io/Target-Capture-SNP-Pipeline/).
 
 Users who want to inspect the source files, modify the workflow, or run the R Markdown document locally can clone the repository:
 
